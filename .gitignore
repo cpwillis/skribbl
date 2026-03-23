@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Local dev servers
+node_modules/
+.cache/
+
+# Build artefacts (none expected, but just in case)
+dist/
+out/
+
+# Cloudflare Pages local dev
+.wrangler/
+.dev.vars

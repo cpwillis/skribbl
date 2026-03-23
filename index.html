@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Skribbl Solver — Word List Builder &amp; Hint Search</title>
+    <meta
+      name="description"
+      content="Free skribbl.io word list builder and hint search tool. Browse 70+ word lists, combine and deduplicate them, copy to clipboard for custom skribbl.io games, and use blank/pattern search to guess the current word."
+    />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://skribbl.cpwillis.dev/" />
+    <meta
+      property="og:title"
+      content="Skribbl Solver — Word List Builder &amp; Hint Search"
+    />
+    <meta
+      property="og:description"
+      content="Browse 70+ word lists for skribbl.io. Combine, shuffle, filter and copy custom word sets. Hint search with wildcard patterns. Not affiliated with skribbl.io."
+    />
+
+    <!-- Inline SVG favicon — magnifying glass -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234361ee' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234361ee' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234361ee' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234361ee' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <a href="/" class="site-title" aria-label="Skribbl Solver home">
+          <svg
+            class="logo-icon"
+            aria-hidden="true"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="10" cy="10" r="7" />
+            <line x1="15.5" y1="15.5" x2="21" y2="21" />
+          </svg>
+          <span class="title-label">Skribbl Solver</span>
+        </a>
+        <div class="header-actions">
+          <button
+            id="dark-mode-toggle"
+            class="btn-icon"
+            title="Toggle dark mode"
+            aria-label="Toggle dark mode"
+          >
+            🌙
+          </button>
+          <a
+            href="https://github.com/cpwillis/skribbl"
+            class="btn-icon"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View on GitHub"
+            aria-label="View source on GitHub"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.461-1.11-1.461-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.087.636-1.337-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.847-2.339 4.695-4.566 4.944.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"
+              />
+            </svg>
+            GitHub
+          </a>
+          <a
+            href="https://skribbl.io"
+            class="btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Play Skribbl.io"
+          >
+            ▶ Play Skribbl
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══ BANNERS ══════════════════════════════════════════ -->
+    <div
+      id="storage-banner"
+      class="banner banner-storage"
+      role="note"
+      aria-label="Browser storage notice"
+    >
+      <span
+        >🔒 This site stores your preferences (dark mode, saved word sets) in
+        your browser only. No data leaves your device.</span
+      >
+      <a href="privacy.html">Learn more</a>
+      <button
+        id="storage-banner-close"
+        class="banner-close"
+        aria-label="Dismiss notice"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="banner banner-disclaimer" role="note">
+      ⚠️ Not affiliated with
+      <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
+        >skribbl.io</a
+      >
+      — this is a fan-made tool. Source:
+      <a
+        href="https://github.com/cpwillis/skribbl"
+        target="_blank"
+        rel="noopener noreferrer"
+        >github.com/cpwillis/skribbl</a
+      >
+    </div>
+
+    <div
+      id="shared-banner"
+      class="banner banner-shared hidden"
+      role="status"
+      aria-live="polite"
+    >
+      ✓ Shared word list loaded from URL.
+      <button
+        id="shared-banner-close"
+        class="banner-close"
+        aria-label="Dismiss"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- ═══ MAIN ══════════════════════════════════════════════ -->
+    <main class="main" id="main">
+      <!-- ── SECTION A: HINT SEARCH ─────────────────────────── -->
+      <section class="card" aria-labelledby="search-section-title">
+        <h2 class="card-title" id="search-section-title">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="10" cy="10" r="7" />
+            <line x1="15.5" y1="15.5" x2="21" y2="21" />
+          </svg>
+          Hint Search
+        </h2>
+
+        <div class="section-row">
+          <!-- Left: list picker -->
+          <div class="section-left">
+            <div class="picker-controls">
+              <button id="search-select-all" class="btn-ghost">
+                Select all
+              </button>
+              <button id="search-clear-all" class="btn-ghost">Clear all</button>
+              <button
+                id="search-surprise-btn"
+                class="btn-ghost"
+                title="Load a random word list"
+              >
+                🎲 Surprise me
+              </button>
+            </div>
+            <div
+              class="list-picker-panel"
+              id="search-list-picker"
+              role="group"
+              aria-label="Word list selection for search"
+            ></div>
+            <div
+              class="word-count-badge"
+              id="search-word-count"
+              aria-live="polite"
+            >
+              0 words loaded
+            </div>
+          </div>
+
+          <!-- Right: search controls + results -->
+          <div class="section-right">
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--text-muted);
+                margin-bottom: 0.25rem;
+              "
+            >
+              Enter the hint provided by skribbl.io — use <code>_</code> or
+              <code>?</code> for unknown letters, <code>*</code> for multiple
+              unknowns. Or enter letter counts like <code>3 4</code>.
+            </p>
+
+            <div class="pattern-row">
+              <div class="pattern-input-wrap">
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="e.g. _oa__ or 3 4"
+                  autocomplete="off"
+                  autocorrect="off"
+                  spellcheck="false"
+                  aria-label="Hint pattern input"
+                />
+                <button
+                  class="clear-btn"
+                  id="search-clear-btn"
+                  aria-label="Clear search input"
+                  title="Clear (Esc)"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div class="len-filter">
+              <label for="search-min-len">Length filter:</label>
+              <input
+                type="number"
+                id="search-min-len"
+                min="1"
+                max="30"
+                placeholder="min"
+                aria-label="Minimum word length"
+              />
+              <span>–</span>
+              <input
+                type="number"
+                id="search-max-len"
+                min="1"
+                max="30"
+                placeholder="max"
+                aria-label="Maximum word length"
+              />
+            </div>
+
+            <div class="results-header">
+              <span
+                class="results-count"
+                id="search-result-count"
+                aria-live="polite"
+              ></span>
+              <button
+                id="search-shuffle-btn"
+                class="btn-secondary"
+                style="margin-left: auto"
+              >
+                🔀 Shuffle results
+              </button>
+            </div>
+
+            <div
+              class="word-grid"
+              id="search-results"
+              role="list"
+              aria-label="Search results"
+              aria-live="polite"
+            >
+              <span class="empty-state"
+                >Select one or more word lists to search.</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SECTION B: WORD LIST BUILDER ──────────────────── -->
+      <section class="card" aria-labelledby="builder-section-title">
+        <h2 class="card-title" id="builder-section-title">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+            <line x1="8" y1="8" x2="16" y2="8" />
+            <line x1="8" y1="16" x2="12" y2="16" />
+          </svg>
+          Word List Builder
+        </h2>
+
+        <div class="section-row">
+          <!-- Left: list picker -->
+          <div class="section-left">
+            <div class="picker-controls">
+              <button id="builder-select-all" class="btn-ghost">
+                Select all
+              </button>
+              <button id="builder-clear-all" class="btn-ghost">
+                Clear all
+              </button>
+              <button
+                id="builder-surprise-btn"
+                class="btn-ghost"
+                title="Load a random word list"
+              >
+                🎲 Surprise me
+              </button>
+            </div>
+            <div
+              class="list-picker-panel"
+              id="builder-list-picker"
+              role="group"
+              aria-label="Word list selection for builder"
+            ></div>
+            <div
+              class="word-count-badge"
+              id="builder-word-count"
+              aria-live="polite"
+            >
+              0 words loaded
+            </div>
+
+            <hr class="divider" />
+
+            <!-- Saved Combos -->
+            <div class="saved-combos-section">
+              <div class="combos-label">Saved combos</div>
+              <div
+                class="combo-list"
+                id="combo-list"
+                role="list"
+                aria-label="Saved word list combinations"
+              ></div>
+              <div class="save-combo-row">
+                <input
+                  type="text"
+                  id="save-combo-input"
+                  placeholder="Combo name…"
+                  aria-label="Name for saved combo"
+                  maxlength="40"
+                />
+                <button id="save-combo-btn" class="btn-secondary">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: builder controls + preview -->
+          <div class="section-right">
+            <div class="builder-controls">
+              <!-- Count presets -->
+              <div class="count-presets">
+                <label>Words:</label>
+                <button class="preset-btn" data-preset="50">50</button>
+                <button class="preset-btn" data-preset="100">100</button>
+                <button class="preset-btn" data-preset="all">All</button>
+                <button class="preset-btn" data-preset="custom">Custom</button>
+                <div class="custom-count-wrap hidden" id="custom-count-wrap">
+                  <input
+                    type="number"
+                    id="custom-count-input"
+                    min="1"
+                    max="9999"
+                    value="50"
+                    aria-label="Custom word count"
+                    style="width: 72px"
+                  />
+                </div>
+              </div>
+
+              <!-- Length filter -->
+              <div class="len-filter">
+                <label for="builder-min-len">Length filter:</label>
+                <input
+                  type="number"
+                  id="builder-min-len"
+                  min="1"
+                  max="30"
+                  placeholder="min"
+                  aria-label="Minimum word length"
+                />
+                <span>–</span>
+                <input
+                  type="number"
+                  id="builder-max-len"
+                  min="1"
+                  max="30"
+                  placeholder="max"
+                  aria-label="Maximum word length"
+                />
+              </div>
+
+              <!-- Preview filter -->
+              <div class="preview-filter-wrap">
+                <input
+                  type="text"
+                  id="builder-filter-input"
+                  placeholder="Filter preview (doesn't affect copy)…"
+                  aria-label="Filter word preview"
+                />
+                <button
+                  class="clear-btn"
+                  id="builder-filter-clear"
+                  aria-label="Clear filter"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <!-- Actions -->
+              <div class="action-row">
+                <button id="builder-shuffle-btn" class="btn-secondary">
+                  🔀 Shuffle
+                </button>
+                <button id="builder-copy-btn" class="btn-success">
+                  📋 Copy as CSV
+                </button>
+                <button id="builder-export-btn" class="btn-secondary">
+                  ⬇ Export .txt
+                </button>
+                <button
+                  id="builder-share-btn"
+                  class="btn-icon"
+                  title="Copy shareable URL to clipboard"
+                >
+                  🔗 Share
+                </button>
+              </div>
+            </div>
+
+            <hr class="divider" />
+
+            <div class="results-header">
+              <span
+                class="results-count"
+                id="builder-result-count"
+                aria-live="polite"
+              ></span>
+            </div>
+
+            <div
+              class="word-grid"
+              id="builder-results"
+              role="list"
+              aria-label="Word list preview"
+              aria-live="polite"
+            >
+              <span class="empty-state"
+                >Select one or more word lists to build a set.</span
+              >
+            </div>
+
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--text-muted);
+                margin-top: 0.5rem;
+              "
+            >
+              Paste the copied list into
+              <a
+                href="https://skribbl.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                >skribbl.io</a
+              >
+              → Custom Words field when creating a private lobby.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══ FOOTER ════════════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+      <p>
+        <a href="privacy.html">Privacy &amp; Storage Policy</a> ·
+        <a
+          href="https://github.com/cpwillis/skribbl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
+        · Not affiliated with
+        <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
+          >skribbl.io</a
+        >
+      </p>
+      <p style="margin-top: 0.4rem">
+        © cpwillis —
+        <a
+          href="https://github.com/cpwillis/skribbl/blob/main/LICENSE"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Custom Attribution Licence</a
+        >
+      </p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/pwa.js"></script>
+  </body>
+</html>

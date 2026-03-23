@@ -1,0 +1,376 @@
+[
+  {
+    "group": "Default",
+    "name": "English",
+    "path": "word_lists/Default/English.json"
+  },
+  {
+    "group": "Default",
+    "name": "English 2",
+    "path": "word_lists/Default/English2.json"
+  },
+  {
+    "group": "Default",
+    "name": "English 3",
+    "path": "word_lists/Default/English3.json"
+  },
+  {
+    "group": "Default",
+    "name": "French",
+    "path": "word_lists/Default/French.json"
+  },
+  {
+    "group": "Default",
+    "name": "German",
+    "path": "word_lists/Default/German.json"
+  },
+  {
+    "group": "Default",
+    "name": "Korean",
+    "path": "word_lists/Default/Korean.json"
+  },
+  {
+    "group": "Default",
+    "name": "Spanish",
+    "path": "word_lists/Default/Spanish.json"
+  },
+
+  {
+    "group": "Animals",
+    "name": "Animals",
+    "path": "word_lists/Categories/Animals/Animals.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Birds",
+    "path": "word_lists/Categories/Animals/Birds.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Bugs",
+    "path": "word_lists/Categories/Animals/Bugs.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Dinosaurs",
+    "path": "word_lists/Categories/Animals/Dinosaurs.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Lizards",
+    "path": "word_lists/Categories/Animals/Lizards.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Mammals",
+    "path": "word_lists/Categories/Animals/Mammals.json"
+  },
+
+  {
+    "group": "Anime",
+    "name": "Adventure",
+    "path": "word_lists/Categories/Anime/Adventure.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Horror",
+    "path": "word_lists/Categories/Anime/Horror.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Romance",
+    "path": "word_lists/Categories/Anime/Romance.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Slice of Life",
+    "path": "word_lists/Categories/Anime/SliceOfLife.json"
+  },
+
+  {
+    "group": "Brands",
+    "name": "Automotive",
+    "path": "word_lists/Categories/Brands/Automotive.json"
+  },
+  {
+    "group": "Brands",
+    "name": "Fashion",
+    "path": "word_lists/Categories/Brands/Fashion.json"
+  },
+  {
+    "group": "Brands",
+    "name": "Tech",
+    "path": "word_lists/Categories/Brands/Tech.json"
+  },
+
+  {
+    "group": "Countries",
+    "name": "Africa",
+    "path": "word_lists/Categories/Countries/Africa.json"
+  },
+  {
+    "group": "Countries",
+    "name": "America",
+    "path": "word_lists/Categories/Countries/America.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Asia",
+    "path": "word_lists/Categories/Countries/Asia.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Europe",
+    "path": "word_lists/Categories/Countries/Europe.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Oceania",
+    "path": "word_lists/Categories/Countries/Oceania.json"
+  },
+
+  {
+    "group": "Difficulties",
+    "name": "Easy",
+    "path": "word_lists/Categories/Difficulties/Easy.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Medium",
+    "path": "word_lists/Categories/Difficulties/Medium.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Hard",
+    "path": "word_lists/Categories/Difficulties/Hard.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Difficult",
+    "path": "word_lists/Categories/Difficulties/Difficult.json"
+  },
+
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Grab Bag",
+    "path": "word_lists/Categories/Dungeons&Dragons/GrabBag.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Items",
+    "path": "word_lists/Categories/Dungeons&Dragons/Items.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Monsters",
+    "path": "word_lists/Categories/Dungeons&Dragons/Monsters.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Spells",
+    "path": "word_lists/Categories/Dungeons&Dragons/Spells.json"
+  },
+
+  {
+    "group": "Famous People",
+    "name": "Actors",
+    "path": "word_lists/Categories/FamousPeople/Actors.json"
+  },
+  {
+    "group": "Famous People",
+    "name": "Musicians",
+    "path": "word_lists/Categories/FamousPeople/Musicians.json"
+  },
+  {
+    "group": "Famous People",
+    "name": "YouTubers",
+    "path": "word_lists/Categories/FamousPeople/YouTubers.json"
+  },
+
+  {
+    "group": "Food & Drinks",
+    "name": "Drinks",
+    "path": "word_lists/Categories/Food&Drinks/Drinks.json"
+  },
+  {
+    "group": "Food & Drinks",
+    "name": "Foods",
+    "path": "word_lists/Categories/Food&Drinks/Foods.json"
+  },
+  {
+    "group": "Food & Drinks",
+    "name": "Vegetables",
+    "path": "word_lists/Categories/Food&Drinks/Vegetables.json"
+  },
+
+  {
+    "group": "Harry Potter",
+    "name": "Characters",
+    "path": "word_lists/Categories/HarryPotter/Characters.json"
+  },
+  {
+    "group": "Harry Potter",
+    "name": "General",
+    "path": "word_lists/Categories/HarryPotter/General.json"
+  },
+  {
+    "group": "Harry Potter",
+    "name": "Spells",
+    "path": "word_lists/Categories/HarryPotter/Spells.json"
+  },
+
+  {
+    "group": "Miscellaneous",
+    "name": "Meme",
+    "path": "word_lists/Categories/Miscellaneous/Meme.json"
+  },
+  {
+    "group": "Miscellaneous",
+    "name": "NSFW",
+    "path": "word_lists/Categories/Miscellaneous/NSFW.json"
+  },
+  {
+    "group": "Miscellaneous",
+    "name": "Random Items",
+    "path": "word_lists/Categories/Miscellaneous/RandomItemsObjects.json"
+  },
+
+  {
+    "group": "Movies & Shows",
+    "name": "Action",
+    "path": "word_lists/Categories/Movies&Shows/Aciton.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Comedy",
+    "path": "word_lists/Categories/Movies&Shows/Comedy.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Crime",
+    "path": "word_lists/Categories/Movies&Shows/Crime.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "DC Universe",
+    "path": "word_lists/Categories/Movies&Shows/DCUniverse.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Horror",
+    "path": "word_lists/Categories/Movies&Shows/Horror.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Marvel",
+    "path": "word_lists/Categories/Movies&Shows/Marvel.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Netflix",
+    "path": "word_lists/Categories/Movies&Shows/Netflix.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "TV Series",
+    "path": "word_lists/Categories/Movies&Shows/TVSeries.json"
+  },
+
+  {
+    "group": "Pokémon",
+    "name": "Gen 1",
+    "path": "word_lists/Categories/Pokemon/Gen1.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 2",
+    "path": "word_lists/Categories/Pokemon/Gen2.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 3",
+    "path": "word_lists/Categories/Pokemon/Gen3.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 4",
+    "path": "word_lists/Categories/Pokemon/Gen4.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 5",
+    "path": "word_lists/Categories/Pokemon/Gen5.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 6",
+    "path": "word_lists/Categories/Pokemon/Gen6.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 7",
+    "path": "word_lists/Categories/Pokemon/Gen7.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 8",
+    "path": "word_lists/Categories/Pokemon/Gen8.json"
+  },
+
+  {
+    "group": "Sports",
+    "name": "Athletes",
+    "path": "word_lists/Categories/Sports/Athletes.json"
+  },
+  {
+    "group": "Sports",
+    "name": "Sports",
+    "path": "word_lists/Categories/Sports/Sports.json"
+  },
+
+  {
+    "group": "Video Games",
+    "name": "Fortnite",
+    "path": "word_lists/Categories/VideoGames/Fortnite.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "League of Legends",
+    "path": "word_lists/Categories/VideoGames/League of Legends.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "League of Legends (2)",
+    "path": "word_lists/Categories/VideoGames/LeagueOfLegends.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Minecraft",
+    "path": "word_lists/Categories/VideoGames/Minecraft.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Mobile Legends",
+    "path": "word_lists/Categories/VideoGames/MobileLegends.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Nintendo",
+    "path": "word_lists/Categories/VideoGames/Nintendo.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Overwatch Heroes",
+    "path": "word_lists/Categories/VideoGames/Overwatch Heroes.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Roblox",
+    "path": "word_lists/Categories/VideoGames/Roblox.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Super Smash Bros",
+    "path": "word_lists/Categories/VideoGames/SuperSmashBrosUltimate.json"
+  }
+]

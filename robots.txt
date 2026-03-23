@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /word_lists/
+
+Sitemap: https://skribbl.cpwillis.dev/sitemap.xml

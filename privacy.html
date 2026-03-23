@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy &amp; Storage Policy — Skribbl Solver</title>
+    <meta
+      name="description"
+      content="Privacy and storage policy for Skribbl Solver. No analytics, no tracking, no server-side storage. Browser storage is used only for functional preferences."
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234361ee' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234361ee' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .prose {
+        max-width: 720px;
+        margin: 2rem auto;
+        padding: 0 1rem 3rem;
+      }
+      .prose h1 {
+        font-size: 1.7rem;
+        margin-bottom: 0.25rem;
+      }
+      .prose .subtitle {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+      }
+      .prose h2 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 1.75rem 0 0.5rem;
+      }
+      .prose p,
+      .prose ul {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.7;
+      }
+      .prose ul {
+        padding-left: 1.4rem;
+      }
+      .prose li {
+        margin-bottom: 0.3rem;
+      }
+      .prose .notice {
+        background: var(--disclaimer-bg);
+        border: 1px solid var(--disclaimer-border);
+        color: var(--disclaimer-text);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <a href="/" class="site-title" aria-label="Skribbl Solver home">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="10" cy="10" r="7" />
+            <line x1="15.5" y1="15.5" x2="21" y2="21" />
+          </svg>
+          <span class="title-label">Skribbl Solver</span>
+        </a>
+        <div class="header-actions">
+          <button
+            id="dark-mode-toggle"
+            class="btn-icon"
+            title="Toggle dark mode"
+            aria-label="Toggle dark mode"
+          >
+            🌙
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="prose">
+      <a class="back-link" href="/">← Back to Skribbl Solver</a>
+
+      <h1>Privacy &amp; Storage Policy</h1>
+      <p class="subtitle">Last updated: March 2026</p>
+
+      <div class="notice">
+        <strong>Short version:</strong> We collect no personal data, run no
+        analytics, and store nothing on any server. Everything this app stores
+        lives only in your own browser and never leaves your device.
+      </div>
+
+      <h2>1. What this site is</h2>
+      <p>
+        Skribbl Solver is a free, open-source fan-made tool for players of
+        <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
+          >skribbl.io</a
+        >. It is not affiliated with, endorsed by, or connected to skribbl.io or
+        its operators. The source code is publicly available at
+        <a
+          href="https://github.com/cpwillis/skribbl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >github.com/cpwillis/skribbl</a
+        >.
+      </p>
+
+      <h2>2. No analytics or tracking</h2>
+      <p>
+        This site does <strong>not</strong> use any analytics service, tracking
+        pixel, advertising script, or third-party cookie. No data about you,
+        your device, or your usage is collected, transmitted, or processed by
+        us.
+      </p>
+
+      <h2>3. Browser storage (localStorage)</h2>
+      <p>
+        This site uses your browser's <code>localStorage</code> API — a standard
+        browser feature — to save the following preferences
+        <strong>locally on your device only</strong>:
+      </p>
+      <ul>
+        <li>
+          <strong>Theme preference</strong> — whether you have selected light or
+          dark mode.
+        </li>
+        <li>
+          <strong>Saved word list combinations</strong> — any named sets of word
+          lists you choose to save using the "Save combo" feature.
+        </li>
+        <li>
+          <strong>Storage banner dismissed</strong> — whether you have dismissed
+          the storage notice banner.
+        </li>
+      </ul>
+      <p>
+        This data is classified as
+        <strong>strictly necessary / functional</strong> and is used solely to
+        improve your experience on this site. It is never sent to any server,
+        never shared with any third party, and never used for advertising or
+        analytics purposes.
+      </p>
+      <p>
+        Because this storage is functional and remains entirely on your device,
+        it does not require opt-in consent under applicable privacy regulations.
+        By continuing to use this site, you acknowledge use of browser storage
+        for these purposes. You can clear this data at any time by clearing your
+        browser's local storage for this site.
+      </p>
+
+      <h2>4. Service Worker &amp; offline caching</h2>
+      <p>
+        This site installs a Service Worker that caches the application files
+        (HTML, CSS, JavaScript) and word list data files in your browser's cache
+        storage. This allows the app to work offline and load faster on repeat
+        visits. Cached data contains only the word list files included in this
+        repository and is entirely local to your browser.
+      </p>
+      <p>
+        You can inspect or remove this cache at any time via your browser's
+        developer tools (Application → Cache Storage / Service Workers).
+      </p>
+
+      <h2>5. External links</h2>
+      <p>
+        This site contains links to
+        <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
+          >skribbl.io</a
+        >
+        and
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+          >GitHub</a
+        >. We are not responsible for the privacy practices or content of those
+        external sites.
+      </p>
+
+      <h2>6. No warranty &amp; limitation of liability</h2>
+      <p>
+        This tool is provided <strong>"as is"</strong>, without warranty of any
+        kind, express or implied. The author(s) accept no responsibility or
+        liability for any loss, damage, or adverse consequences arising from use
+        of this tool, reliance on the word lists provided, or any decision made
+        based on information displayed here. Use at your own risk.
+      </p>
+      <p>
+        Word lists are community-sourced and may contain inaccuracies. They are
+        provided for entertainment purposes only and have no guaranteed accuracy
+        or completeness.
+      </p>
+
+      <h2>7. Contact</h2>
+      <p>
+        For questions or concerns, please open an issue on the
+        <a
+          href="https://github.com/cpwillis/skribbl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub repository</a
+        >.
+      </p>
+    </div>
+
+    <footer class="site-footer" role="contentinfo">
+      <p>
+        <a href="privacy.html">Privacy &amp; Storage Policy</a> ·
+        <a
+          href="https://github.com/cpwillis/skribbl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
+        · Not affiliated with
+        <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
+          >skribbl.io</a
+        >
+      </p>
+    </footer>
+
+    <script>
+      // Lightweight dark mode init for privacy page (no app.js needed)
+      (function () {
+        const stored = localStorage.getItem("skribbl_theme");
+        const theme =
+          stored ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        const btn = document.getElementById("dark-mode-toggle");
+        if (btn) {
+          btn.textContent = theme === "dark" ? "☀️" : "🌙";
+          btn.addEventListener("click", () => {
+            const cur = document.documentElement.getAttribute("data-theme");
+            const next = cur === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("skribbl_theme", next);
+            btn.textContent = next === "dark" ? "☀️" : "🌙";
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

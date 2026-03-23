@@ -9,7 +9,7 @@ const PRECACHE_URLS = [
     '/js/pwa.js',
     '/manifest.webmanifest',
     '/404.html',
-  '/word_lists/manifest.json',
+    '/word_lists/manifest.json',
     '/word_lists/Categories/Animals/Animals.json',
     '/word_lists/Categories/Animals/Birds.json',
     '/word_lists/Categories/Animals/Bugs.json',

@@ -30,7 +30,7 @@ const TEMPLATE_CONTROLS_ROW = `
   <div class="len-filter">
     <label data-for="min-len">Length filter:</label>
     <input type="number" data-id="min-len" min="1" max="30" placeholder="min" aria-label="Minimum word length" />
-    <span>–</span>
+    <span>-</span>
     <input type="number" data-id="max-len" min="1" max="30" placeholder="max" aria-label="Maximum word length" />
     <button data-id="shuffle-btn" class="btn-secondary">🔀 Shuffle results</button>
   </div>

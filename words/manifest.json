@@ -313,11 +313,6 @@
   {
     "group": "Video Games",
     "name": "League of Legends",
-    "path": "words/VideoGames/League of Legends.json"
-  },
-  {
-    "group": "Video Games",
-    "name": "League of Legends (2)",
     "path": "words/VideoGames/LeagueOfLegends.json"
   },
   {

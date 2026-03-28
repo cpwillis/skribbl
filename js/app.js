@@ -62,7 +62,7 @@ function parseWordList(rawText) {
 }
 
 async function fetchAndParse(path) {
-    if (listCache.has(path)) return listCache.get(path);
+    if (!(LOCAL_DEVELOPMENT && local_mode) && listCache.has(path)) return listCache.get(path);
     const res = await fetch(path);
     if (!res.ok) throw new Error(`Failed to fetch ${path}`);
     const text = await res.text();
@@ -785,6 +785,7 @@ function initTabs() {
 async function init() {
     initDarkMode();
     initStorageBanner();
+    initLocalDevTools();
 
     // Fetch manifest
     const res = await fetch('words/manifest.json');

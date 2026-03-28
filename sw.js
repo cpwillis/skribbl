@@ -15,6 +15,7 @@ const STATIC_URLS = [
     '/privacy.html',
     '/css/style.css',
     '/js/app.js',
+    '/js/local_development.js',
     '/js/pwa.js',
     '/manifest.webmanifest',
     '/404.html',

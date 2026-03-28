@@ -286,7 +286,6 @@ function syncPickerCheckboxes(containerId, state) {
 // ── SHARED POOL REFRESH ──────────────────────────────────
 async function refreshPool() {
     appState.pool = await loadSelectedLists([...appState.selectedPaths]);
-    dom.wordCount.textContent = `${appState.pool.length} words loaded`;
     runSearch();
     applyBuilderPreset();
 }
@@ -781,7 +780,6 @@ function showSharedBanner() {
 
 // ── Shared controls (picker, select-all, clear-all, surprise) ─
 function initSharedControls() {
-    dom.wordCount = document.getElementById('word-count');
     dom.selectAll = document.getElementById('select-all');
     dom.clearAll = document.getElementById('clear-all');
     dom.surpriseBtn = document.getElementById('surprise-btn');
@@ -797,7 +795,6 @@ function initSharedControls() {
         syncPickerCheckboxes('list-picker', appState);
         appState.pool = [];
         builderState.working = [];
-        dom.wordCount.textContent = '0 words loaded';
         runSearch();
         renderBuilderPreview();
     });

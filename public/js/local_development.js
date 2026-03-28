@@ -1,5 +1,5 @@
 /* ===================================================
-   local-dev.js — localhost-only development tooling.
+   local-dev.js - localhost-only development tooling.
    All exports are globals referenced by app.js.
    On any non-localhost origin every function is a no-op
    so this file is safe to ship to production.
@@ -8,7 +8,7 @@
 'use strict';
 
 // True only when running on localhost / 127.0.0.1.
-// Evaluated once at parse time — cannot be spoofed after load.
+// Evaluated once at parse time - cannot be spoofed after load.
 const LOCAL_DEVELOPMENT = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
 // Set to true in the browser console to bypass the in-memory listCache in
@@ -26,7 +26,7 @@ function clear_cache() {
 }
 
 // Injects a "Clear cache" button into the page footer.
-// Called from init() in app.js — does nothing on deployed origins.
+// Called from init() in app.js - does nothing on deployed origins.
 function initLocalDevTools() {
     if (!LOCAL_DEVELOPMENT) return;
     const footer = document.querySelector('.site-footer');

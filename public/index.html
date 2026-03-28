@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Skribbl Solver — Word List Builder &amp; Hint Search</title>
+    <title>Skribbl Solver - Word List Builder &amp; Hint Search</title>
     <meta
       name="description"
       content="Free skribbl.io word list builder and hint search tool. Browse 70+ word lists, combine and deduplicate them, copy to clipboard for custom skribbl.io games, and use blank/pattern search to guess the current word."
@@ -15,14 +15,14 @@
     <meta property="og:url" content="https://skribbl.cpwillis.dev/" />
     <meta
       property="og:title"
-      content="Skribbl Solver — Word List Builder &amp; Hint Search"
+      content="Skribbl Solver - Word List Builder &amp; Hint Search"
     />
     <meta
       property="og:description"
       content="Browse 70+ word lists for skribbl.io. Combine, shuffle, filter and copy custom word sets. Hint search with wildcard patterns. Not affiliated with skribbl.io."
     />
 
-    <!-- Inline SVG favicon — magnifying glass -->
+    <!-- Inline SVG favicon - magnifying glass -->
     <link
       rel="icon"
       type="image/svg+xml"
@@ -127,7 +127,7 @@
       <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
         >skribbl.io</a
       >
-      — this is a fan-made tool. Source:
+      - this is a fan-made tool. Source:
       <a
         href="https://github.com/cpwillis/skribbl"
         target="_blank"
@@ -303,7 +303,7 @@
                   placeholder="min"
                   aria-label="Minimum word length"
                 />
-                <span>–</span>
+                <span>-</span>
                 <input
                   type="number"
                   id="search-max-len"
@@ -312,9 +312,6 @@
                   placeholder="max"
                   aria-label="Maximum word length"
                 />
-                <button id="search-shuffle-btn" class="btn-secondary">
-                  🔀 Shuffle results
-                </button>
               </div>
 
               <div class="results-header">
@@ -323,6 +320,9 @@
                   id="search-result-count"
                   aria-live="polite"
                 ></span>
+                <button id="search-shuffle-btn" class="btn-secondary">
+                  🔀 Shuffle results
+                </button>
               </div>
 
               <div
@@ -378,7 +378,7 @@
                     placeholder="min"
                     aria-label="Minimum word length"
                   />
-                  <span>–</span>
+                  <span>-</span>
                   <input
                     type="number"
                     id="builder-max-len"
@@ -470,7 +470,7 @@
             >
               <p class="custom-hint">
                 Paste your own comma-separated word list below. It's saved
-                locally in your browser — nothing leaves your device.
+                locally in your browser - nothing leaves your device.
               </p>
 
               <div class="custom-words-editor">
@@ -513,7 +513,7 @@
                   placeholder="min"
                   aria-label="Minimum word length"
                 />
-                <span>–</span>
+                <span>-</span>
                 <input
                   type="number"
                   id="custom-search-max-len"
@@ -568,7 +568,7 @@
         >
       </p>
       <p>
-        © cpwillis —
+        © cpwillis -
         <a
           href="https://github.com/cpwillis/skribbl/blob/main/LICENSE"
           target="_blank"
@@ -578,7 +578,7 @@
       </p>
     </footer>
 
-    <!-- Shared pattern-row template — instantiated per tab by search-panel.js -->
+    <!-- Shared pattern-row template - instantiated per tab by search-panel.js -->
     <template id="tpl-pattern-row">
       <div class="pattern-row">
         <div class="pattern-col pattern-input-blanks">

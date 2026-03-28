@@ -1,5 +1,5 @@
 /**
- * Service Worker — cache-first PWA shell.
+ * Service Worker - cache-first PWA shell.
  *
  * On install: caches all static assets plus every word list derived from
  * /words/manifest.json. After the first visit the app is fully offline.
@@ -28,7 +28,7 @@ self.addEventListener('install', event => {
             .then(r => r.json())
             .then(entries => entries.map(e => '/' + e.path))
             .then(wordUrls => caches.open(CACHE).then(cache => Promise.all([
-                // App shell must fully succeed — any failure here = broken app
+                // App shell must fully succeed - any failure here = broken app
                 cache.addAll(STATIC_URLS),
                 // Word lists cached individually so one bad file won't abort the install
                 ...wordUrls.map(url => cache.add(url).catch(() => { })),

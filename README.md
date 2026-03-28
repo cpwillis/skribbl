@@ -10,18 +10,18 @@ A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 
 ## Features
 
-- **Hint Search** — Enter the blank hint from skribbl.io (e.g. `_oa__`) using `_`/`?` for single unknowns and `*` for multi-character wildcards. Or type word lengths (e.g. `4 3`) in the letter-count field — the two fields stay in sync. Results update live as you type.
-- **Word List Builder** — Select and combine any of the 70+ included word lists. Merged pools are case-insensitively deduplicated. Choose a word count (50, 100, All, or custom), shuffle, and copy the result as a comma-separated list for use in skribbl.io custom games.
-- **Custom Word List** — Paste your own comma-separated word list, save it to your browser, and run the same blank/pattern search against it.
-- **Multi-select & deduplication** — Combine multiple lists from different categories into a single deduplicated pool.
-- **Saved Combos** — Save named selections of word lists to your browser for quick recall.
-- **Share URL** — Encode your current list selection into a URL to share with others.
-- **Surprise Me** — Load a random word list at the click of a button.
-- **Export** — Download your word set as a `.txt` file.
-- **Dark mode** — Persistent, respects your system preference.
-- **Word length filter** — Filter words by character count in all three tabs (Search, Builder, Custom).
-- **PWA** — Installable, works offline after first load.
-- **Mobile friendly** — Responsive layout for phones and tablets.
+- **Hint Search** - Enter the blank hint from skribbl.io (e.g. `_oa__`) using `_`/`?` for single unknowns and `*` for multi-character wildcards. Or type word lengths (e.g. `4 3`) in the letter-count field - the two fields stay in sync. Results update live as you type.
+- **Word List Builder** - Select and combine any of the 70+ included word lists. Merged pools are case-insensitively deduplicated. Choose a word count (50, 100, All, or custom), shuffle, and copy the result as a comma-separated list for use in skribbl.io custom games.
+- **Custom Word List** - Paste your own comma-separated word list, save it to your browser, and run the same blank/pattern search against it.
+- **Multi-select & deduplication** - Combine multiple lists from different categories into a single deduplicated pool.
+- **Saved Combos** - Save named selections of word lists to your browser for quick recall.
+- **Share URL** - Encode your current list selection into a URL to share with others.
+- **Surprise Me** - Load a random word list at the click of a button.
+- **Export** - Download your word set as a `.txt` file.
+- **Dark mode** - Persistent, respects your system preference.
+- **Word length filter** - Filter words by character count in all three tabs (Search, Builder, Custom).
+- **PWA** - Installable, works offline after first load.
+- **Mobile friendly** - Responsive layout for phones and tablets.
 
 ---
 
@@ -42,7 +42,7 @@ A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 | Languages          | French, German, Korean, Spanish                                                                                                     |
 | Miscellaneous      | Meme, NSFW, Random Items                                                                                                            |
 | Movies & Shows     | Action, Comedy, Crime, DC Universe, Horror, Marvel, Netflix, TV Series                                                              |
-| Pokémon            | Gen 1–8                                                                                                                             |
+| Pokémon            | Gen 1-8                                                                                                                             |
 | Sports             | Athletes, Sports                                                                                                                    |
 | Video Games        | Fortnite, League of Legends, League of Legends (2), Minecraft, Mobile Legends, Nintendo, Overwatch Heroes, Roblox, Super Smash Bros |
 
@@ -68,7 +68,7 @@ Contributions are welcome via pull request. Please:
 1. Fork the repository.
 2. Make your changes on a feature branch.
 3. Open a PR with a clear description of what was changed and why.
-4. Ensure your changes comply with the [licence](#licence) — credit to the original author and a link back to this repository must be preserved.
+4. Ensure your changes comply with the [licence](#licence) - credit to the original author and a link back to this repository must be preserved.
 
 Bug reports and feature requests are welcome via [GitHub Issues](https://github.com/cpwillis/skribbl/issues).
 

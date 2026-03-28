@@ -1,4 +1,4 @@
-/* Shared dark-mode initialisation — used by all pages */
+/* Shared dark-mode initialisation - used by all pages */
 (function () {
   var stored = localStorage.getItem('skribbl_theme');
   var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');

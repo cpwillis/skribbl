@@ -1,5 +1,5 @@
 /* ===================================================
-   Skribbl Solver — app.js
+   Skribbl Solver - app.js
    Vanilla JS, no dependencies, no build step.
    =================================================== */
 
@@ -295,7 +295,7 @@ function appendPage(state, resultsEl, countEl, singular, plural) {
 
     const noun = words.length === 1 ? singular : plural;
     if (state.rendered < words.length) {
-        countEl.textContent = `Showing ${state.rendered} of ${words.length} ${noun} — scroll to load more`;
+        countEl.textContent = `Showing ${state.rendered} of ${words.length} ${noun} - scroll to load more`;
         // If the container still isn't scrollable, keep loading until it is
         if (resultsEl.scrollHeight <= resultsEl.clientHeight) {
             appendPage(state, resultsEl, countEl, singular, plural);

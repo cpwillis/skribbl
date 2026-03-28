@@ -6,7 +6,7 @@
     <title>Privacy &amp; Storage Policy — Skribbl Solver</title>
     <meta
       name="description"
-      content="Privacy and storage policy for Skribbl Solver. No analytics, no tracking, no server-side storage. Browser storage is used only for functional preferences."
+      content="Privacy and storage policy for Skribbl Solver. Cloudflare Web Analytics runs on the initial load only; after caching the app works fully offline. No personal data collected."
     />
     <link
       rel="icon"
@@ -55,9 +55,13 @@
       <p class="subtitle">Last updated: March 2026</p>
 
       <div class="notice">
-        <strong>Short version:</strong> We collect no personal data, run no
-        analytics, and store nothing on any server. Everything this app stores
-        lives only in your own browser and never leaves your device.
+        <strong>Short version:</strong> On your first visit, Cloudflare Web
+        Analytics collects anonymous, cookie-free page metrics. After that
+        initial load the app is fully cached in your browser and can run
+        completely offline — no further network requests and no further
+        analytics. Everything else this app stores lives only in your own
+        browser and never leaves your device. By using this site you accept this
+        policy in full.
       </div>
 
       <h2>1. What this site is</h2>
@@ -75,12 +79,51 @@
         >.
       </p>
 
-      <h2>2. No analytics or tracking</h2>
+      <h2>2. Cloudflare Web Analytics</h2>
       <p>
-        This site does <strong>not</strong> use any analytics service, tracking
-        pixel, advertising script, or third-party cookie. No data about you,
-        your device, or your usage is collected, transmitted, or processed by
-        us.
+        On the <strong>initial page load</strong> — and on any subsequent load
+        where your browser fetches resources directly from the network rather
+        than from the local cache — this site loads the
+        <a
+          href="https://www.cloudflare.com/web-analytics/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Cloudflare Web Analytics</a
+        >
+        beacon script from
+        <code>static.cloudflareinsights.com</code>.
+      </p>
+      <p>Cloudflare Web Analytics is a privacy-first service that:</p>
+      <ul>
+        <li>
+          Uses <strong>no cookies</strong> and sets no persistent identifiers.
+        </li>
+        <li>
+          Collects <strong>no personal data</strong> such as IP addresses,
+          names, or email addresses.
+        </li>
+        <li>
+          Gathers only anonymous, aggregate metrics: page URL, referrer,
+          approximate country, browser type, and device type.
+        </li>
+        <li>
+          Is governed by
+          <a
+            href="https://www.cloudflare.com/privacypolicy/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Cloudflare's Privacy Policy</a
+          >.
+        </li>
+      </ul>
+      <p>
+        Once the service worker has cached the application (see §4), all app
+        resources — HTML, CSS, JavaScript, and word lists — are served from your
+        browser's local cache. The Cloudflare beacon is a cross-origin script
+        that the service worker does not cache; it therefore only fires when
+        your browser makes a live network request to this site. This site uses
+        no other analytics service, tracking pixel, advertising script, or
+        third-party cookie.
       </p>
 
       <h2>3. Browser storage (localStorage)</h2>
@@ -118,17 +161,30 @@
         browser's local storage for this site.
       </p>
 
-      <h2>4. Service Worker &amp; offline caching</h2>
+      <h2>4. Service Worker &amp; offline operation</h2>
       <p>
-        This site installs a Service Worker that caches the application files
-        (HTML, CSS, JavaScript) and word list data files in your browser's cache
-        storage. This allows the app to work offline and load faster on repeat
-        visits. Cached data contains only the word list files included in this
-        repository and is entirely local to your browser.
+        On your first visit, this site installs a Service Worker that caches the
+        entire application — HTML, CSS, JavaScript, and all word list data files
+        — in your browser's cache storage.
+        <strong
+          >After this initial load the app is fully self-contained and runs
+          completely offline.</strong
+        >
+        All subsequent visits are served from your local cache; no network
+        connection is needed to use the app.
       </p>
       <p>
-        You can inspect or remove this cache at any time via your browser's
-        developer tools (Application → Cache Storage / Service Workers).
+        The Service Worker only caches same-origin resources. External scripts —
+        including the Cloudflare Web Analytics beacon — are cross-origin and are
+        therefore <strong>not</strong> cached. As a result, analytics will only
+        fire when your browser makes a live network request to this site (i.e.
+        before the cache is populated, or if the cache is cleared).
+      </p>
+      <p>
+        Cached data contains only the word list files included in this
+        repository and is entirely local to your browser. You can inspect or
+        remove this cache at any time via your browser's developer tools
+        (Application → Cache Storage / Service Workers).
       </p>
 
       <h2>5. External links</h2>
@@ -144,18 +200,37 @@
         external sites.
       </p>
 
-      <h2>6. No warranty &amp; limitation of liability</h2>
+      <h2>6. Acceptance, no warranty &amp; limitation of liability</h2>
       <p>
-        This tool is provided <strong>"as is"</strong>, without warranty of any
-        kind, express or implied. The author(s) accept no responsibility or
-        liability for any loss, damage, or adverse consequences arising from use
-        of this tool, reliance on the word lists provided, or any decision made
-        based on information displayed here. Use at your own risk.
+        <strong
+          >By accessing or using this site in any way, you acknowledge that you
+          have read, understood, and agree to be bound by this policy in its
+          entirety.</strong
+        >
+        If you do not agree, you must not use this site.
       </p>
       <p>
-        Word lists are community-sourced and may contain inaccuracies. They are
-        provided for entertainment purposes only and have no guaranteed accuracy
-        or completeness.
+        This tool is provided <strong>"as is"</strong> and
+        <strong>"as available"</strong>, without warranty of any kind, express
+        or implied, including but not limited to warranties of merchantability,
+        fitness for a particular purpose, accuracy, or non-infringement. There
+        is <strong>no guarantee of functionality</strong>, correctness, or
+        suitability for any purpose. The author(s) accept no responsibility or
+        liability for any loss, damage, or adverse consequences arising from:
+      </p>
+      <ul>
+        <li>use of, or inability to use, this tool;</li>
+        <li>reliance on any word list or information displayed;</li>
+        <li>any decision made based on information displayed here;</li>
+        <li>interruption, suspension, or discontinuation of the service;</li>
+        <li>data loss or cache expiry; or</li>
+        <li>any other matter relating to this site.</li>
+      </ul>
+      <p>
+        Word lists are community-sourced and may contain inaccuracies, offensive
+        content, or omissions. They are provided for entertainment purposes only
+        and carry no guarantee of accuracy or completeness. Use entirely at your
+        own risk.
       </p>
 
       <h2>7. Service availability</h2>

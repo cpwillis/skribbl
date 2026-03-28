@@ -11,6 +11,14 @@ let manifest = [];             // [{group, name, path}]
 
 // ── Search result limit ───────────────────────────────────
 const SEARCH_RESULT_LIMIT = 200;
+const SEARCH_PAGE_SIZE = 1000;
+
+// Pagination state for unlimited scroll
+const searchPage = {
+    words: [],
+    regex: null,
+    rendered: 0,
+};
 
 // ── Shared state ──────────────────────────────────────────
 const appState = {
@@ -274,13 +282,18 @@ function runSearch() {
 
 function renderSearchResults(words, regex) {
     const limited = dom.searchLimitToggle?.checked && words.length > SEARCH_RESULT_LIMIT;
-    const display = limited ? words.slice(0, SEARCH_RESULT_LIMIT) : words;
+    const paginated = !dom.searchLimitToggle?.checked && words.length > SEARCH_PAGE_SIZE;
 
+    // Update count label
     if (words.length) {
         const countText = `${words.length} match${words.length === 1 ? '' : 'es'}`;
-        dom.searchResultCount.textContent = limited
-            ? `Showing ${SEARCH_RESULT_LIMIT} of ${countText} — uncheck "Limit" to see all`
-            : countText;
+        if (limited) {
+            dom.searchResultCount.textContent = `Showing ${SEARCH_RESULT_LIMIT} of ${countText} — uncheck “Limit” to see all`;
+        } else if (paginated) {
+            dom.searchResultCount.textContent = `Showing ${SEARCH_PAGE_SIZE} of ${countText} — scroll to load more`;
+        } else {
+            dom.searchResultCount.textContent = countText;
+        }
     } else {
         dom.searchResultCount.textContent = '';
     }
@@ -297,11 +310,39 @@ function renderSearchResults(words, regex) {
         return;
     }
 
-    const frag = document.createDocumentFragment();
-    for (const w of display) {
-        frag.appendChild(buildWordChip(w));
+    if (paginated) {
+        // Set up pagination state and render first page
+        searchPage.words = words;
+        searchPage.regex = regex;
+        searchPage.rendered = 0;
+        appendSearchPage();
+    } else {
+        // Clear pagination state
+        searchPage.words = [];
+        searchPage.rendered = 0;
+        const display = limited ? words.slice(0, SEARCH_RESULT_LIMIT) : words;
+        const frag = document.createDocumentFragment();
+        for (const w of display) frag.appendChild(buildWordChip(w));
+        dom.searchResults.appendChild(frag);
     }
+}
+
+function appendSearchPage() {
+    const { words, rendered } = searchPage;
+    const next = words.slice(rendered, rendered + SEARCH_PAGE_SIZE);
+    const frag = document.createDocumentFragment();
+    for (const w of next) frag.appendChild(buildWordChip(w));
     dom.searchResults.appendChild(frag);
+    searchPage.rendered += next.length;
+
+    // Update count label while scrolling
+    if (searchPage.rendered < words.length) {
+        dom.searchResultCount.textContent =
+            `Showing ${searchPage.rendered} of ${words.length} match${words.length === 1 ? '' : 'es'} — scroll to load more`;
+    } else {
+        dom.searchResultCount.textContent =
+            `${words.length} match${words.length === 1 ? '' : 'es'}`;
+    }
 }
 
 function initSearchTab() {
@@ -318,6 +359,16 @@ function initSearchTab() {
     dom.searchLimitToggle.addEventListener('change', runSearch);
     dom.searchMinLen.addEventListener('input', debounce(runSearch, 150));
     dom.searchMaxLen.addEventListener('input', debounce(runSearch, 150));
+
+    // Scroll-to-load-more for paginated (unlimited) mode
+    dom.searchResults.addEventListener('scroll', () => {
+        if (!searchPage.words.length) return;
+        if (searchPage.rendered >= searchPage.words.length) return;
+        const el = dom.searchResults;
+        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
+            appendSearchPage();
+        }
+    });
 
     dom.searchClearBtn.addEventListener('click', () => {
         dom.searchInput.value = '';

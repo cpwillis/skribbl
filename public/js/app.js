@@ -372,6 +372,7 @@ function setActivePreset(preset) {
 
 function initSearchTab() {
     document.getElementById('search-pattern-row').replaceWith(buildPatternRow('search'));
+    document.getElementById('search-controls-row').replaceWith(buildControlsRow('search'));
     dom.searchBlanks = document.getElementById('search-blanks');
     dom.searchCount = document.getElementById('search-count');
     dom.searchResults = document.getElementById('search-results');
@@ -710,10 +711,11 @@ function initCustomTab() {
     dom.customWordCountLabel = document.getElementById('custom-word-count');
     dom.customWordsSave = document.getElementById('custom-words-save');
     dom.customWordsClear = document.getElementById('custom-words-clear');
-    dom.customSearchMinLen = document.getElementById('custom-search-min-len');
-    dom.customSearchMaxLen = document.getElementById('custom-search-max-len');
-    dom.customResultCount = document.getElementById('custom-result-count');
     dom.customResults = document.getElementById('custom-results');
+    document.getElementById('custom-controls-row').replaceWith(buildControlsRow('custom'));
+    dom.customSearchMinLen = document.getElementById('custom-min-len');
+    dom.customSearchMaxLen = document.getElementById('custom-max-len');
+    dom.customResultCount = document.getElementById('custom-result-count');
     dom.customShuffleBtn = document.getElementById('custom-shuffle-btn');
     document.getElementById('custom-pattern-row').replaceWith(buildPatternRow('custom'));
     dom.customBlanks = document.getElementById('custom-blanks');

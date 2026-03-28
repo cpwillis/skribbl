@@ -293,37 +293,7 @@
             >
               <div id="search-pattern-row"></div>
 
-              <div class="len-filter">
-                <label for="search-min-len">Length filter:</label>
-                <input
-                  type="number"
-                  id="search-min-len"
-                  min="1"
-                  max="30"
-                  placeholder="min"
-                  aria-label="Minimum word length"
-                />
-                <span>-</span>
-                <input
-                  type="number"
-                  id="search-max-len"
-                  min="1"
-                  max="30"
-                  placeholder="max"
-                  aria-label="Maximum word length"
-                />
-              </div>
-
-              <div class="results-header">
-                <span
-                  class="results-count"
-                  id="search-result-count"
-                  aria-live="polite"
-                ></span>
-                <button id="search-shuffle-btn" class="btn-secondary">
-                  🔀 Shuffle results
-                </button>
-              </div>
+              <div id="search-controls-row"></div>
 
               <div
                 class="word-grid"
@@ -503,37 +473,7 @@
 
               <div id="custom-pattern-row"></div>
 
-              <div class="len-filter">
-                <label for="custom-search-min-len">Length filter:</label>
-                <input
-                  type="number"
-                  id="custom-search-min-len"
-                  min="1"
-                  max="30"
-                  placeholder="min"
-                  aria-label="Minimum word length"
-                />
-                <span>-</span>
-                <input
-                  type="number"
-                  id="custom-search-max-len"
-                  min="1"
-                  max="30"
-                  placeholder="max"
-                  aria-label="Maximum word length"
-                />
-              </div>
-
-              <div class="results-header">
-                <span
-                  class="results-count"
-                  id="custom-result-count"
-                  aria-live="polite"
-                ></span>
-                <button id="custom-shuffle-btn" class="btn-secondary">
-                  🔀 Shuffle results
-                </button>
-              </div>
+              <div id="custom-controls-row"></div>
 
               <div
                 class="word-grid"
@@ -577,51 +517,6 @@
         >
       </p>
     </footer>
-
-    <!-- Shared pattern-row template - instantiated per tab by search-panel.js -->
-    <template id="tpl-pattern-row">
-      <div class="pattern-row">
-        <div class="pattern-col pattern-input-blanks">
-          <span class="pattern-col-label">Search by Letters &amp; Blanks</span>
-          <div class="pattern-input-wrap">
-            <input
-              type="text"
-              data-id="blanks"
-              placeholder="Rom** *n* ***iet"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck="false"
-              aria-label="Search by blanks"
-            />
-          </div>
-        </div>
-        <div class="pattern-col pattern-input-count">
-          <span class="pattern-col-label">Letter Count</span>
-          <div class="pattern-input-wrap">
-            <input
-              type="text"
-              data-id="count"
-              placeholder="5 3 6"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck="false"
-              aria-label="Letter count"
-            />
-          </div>
-        </div>
-        <div class="pattern-col pattern-clear-col">
-          <span class="pattern-col-label" aria-hidden="true"></span>
-          <button
-            class="clear-btn"
-            data-id="clear"
-            aria-label="Clear search"
-            title="Clear (Esc)"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-    </template>
 
     <script src="js/search-panel.js"></script>
     <script src="js/local_development.js"></script>

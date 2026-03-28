@@ -295,37 +295,57 @@
               role="tabpanel"
               aria-labelledby="tab-btn-search"
             >
-              <p
-                style="
-                  font-size: 0.82rem;
-                  color: var(--text-muted);
-                  margin-bottom: 0.25rem;
-                "
-              >
-                Enter the hint provided by skribbl.io — use <code>_</code> or
-                <code>?</code> for unknown letters, <code>*</code> for multiple
-                unknowns. Or enter letter counts like <code>3 4</code>.
-              </p>
-
               <div class="pattern-row">
-                <div class="pattern-input-wrap">
-                  <input
-                    type="text"
-                    id="search-input"
-                    placeholder="e.g. _oa__ or 3 4"
-                    autocomplete="off"
-                    autocorrect="off"
-                    spellcheck="false"
-                    aria-label="Hint pattern input"
-                  />
-                  <button
-                    class="clear-btn"
-                    id="search-clear-btn"
-                    aria-label="Clear search input"
-                    title="Clear (Esc)"
+                <div class="pattern-col pattern-input-blanks">
+                  <span class="pattern-col-label"
+                    >Search by blanks
+                    <small
+                      >(spaces = word breaks, * = unknown letter)</small
+                    ></span
                   >
-                    ✕
-                  </button>
+                  <div class="pattern-input-wrap">
+                    <input
+                      type="text"
+                      id="search-blanks"
+                      placeholder="e.g. *b** **"
+                      autocomplete="off"
+                      autocorrect="off"
+                      spellcheck="false"
+                      aria-label="Search by blanks"
+                    />
+                    <button
+                      class="clear-btn"
+                      id="search-blanks-clear"
+                      aria-label="Clear blanks"
+                      title="Clear (Esc)"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+                <div class="pattern-col pattern-input-count">
+                  <span class="pattern-col-label"
+                    >Letter count <small>(ex. "3 4")</small></span
+                  >
+                  <div class="pattern-input-wrap">
+                    <input
+                      type="text"
+                      id="search-count"
+                      placeholder="e.g. 3 4"
+                      autocomplete="off"
+                      autocorrect="off"
+                      spellcheck="false"
+                      aria-label="Letter count"
+                    />
+                    <button
+                      class="clear-btn"
+                      id="search-count-clear"
+                      aria-label="Clear letter count"
+                      title="Clear (Esc)"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 </div>
               </div>
 

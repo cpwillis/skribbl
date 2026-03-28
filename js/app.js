@@ -333,6 +333,8 @@ function renderSearchResults(words, regex) {
     dom.searchResults.innerHTML = '';
 
     if (!words.length) {
+        searchPage.words = [];
+        searchPage.rendered = 0;
         const em = document.createElement('span');
         em.className = 'empty-state';
         em.textContent = appState.pool.length

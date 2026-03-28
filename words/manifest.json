@@ -1,0 +1,353 @@
+[
+  {
+    "group": "Default",
+    "name": "English",
+    "path": "words/Languages/English.json"
+  },
+
+  {
+    "group": "Animals",
+    "name": "Animals",
+    "path": "words/Animals/Animals.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Birds",
+    "path": "words/Animals/Birds.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Bugs",
+    "path": "words/Animals/Bugs.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Dinosaurs",
+    "path": "words/Animals/Dinosaurs.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Lizards",
+    "path": "words/Animals/Lizards.json"
+  },
+  {
+    "group": "Animals",
+    "name": "Mammals",
+    "path": "words/Animals/Mammals.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Adventure",
+    "path": "words/Anime/Adventure.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Horror",
+    "path": "words/Anime/Horror.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Romance",
+    "path": "words/Anime/Romance.json"
+  },
+  {
+    "group": "Anime",
+    "name": "Slice of Life",
+    "path": "words/Anime/SliceOfLife.json"
+  },
+  {
+    "group": "Brands",
+    "name": "Automotive",
+    "path": "words/Brands/Automotive.json"
+  },
+  {
+    "group": "Brands",
+    "name": "Fashion",
+    "path": "words/Brands/Fashion.json"
+  },
+  {
+    "group": "Brands",
+    "name": "Tech",
+    "path": "words/Brands/Tech.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Africa",
+    "path": "words/Countries/Africa.json"
+  },
+  {
+    "group": "Countries",
+    "name": "America",
+    "path": "words/Countries/America.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Asia",
+    "path": "words/Countries/Asia.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Europe",
+    "path": "words/Countries/Europe.json"
+  },
+  {
+    "group": "Countries",
+    "name": "Oceania",
+    "path": "words/Countries/Oceania.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Easy",
+    "path": "words/Difficulties/Easy.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Medium",
+    "path": "words/Difficulties/Medium.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Hard",
+    "path": "words/Difficulties/Hard.json"
+  },
+  {
+    "group": "Difficulties",
+    "name": "Difficult",
+    "path": "words/Difficulties/Difficult.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Grab Bag",
+    "path": "words/Dungeons&Dragons/GrabBag.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Items",
+    "path": "words/Dungeons&Dragons/Items.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Monsters",
+    "path": "words/Dungeons&Dragons/Monsters.json"
+  },
+  {
+    "group": "Dungeons & Dragons",
+    "name": "Spells",
+    "path": "words/Dungeons&Dragons/Spells.json"
+  },
+  {
+    "group": "Famous People",
+    "name": "Actors",
+    "path": "words/FamousPeople/Actors.json"
+  },
+  {
+    "group": "Famous People",
+    "name": "Musicians",
+    "path": "words/FamousPeople/Musicians.json"
+  },
+  {
+    "group": "Famous People",
+    "name": "YouTubers",
+    "path": "words/FamousPeople/YouTubers.json"
+  },
+  {
+    "group": "Food & Drinks",
+    "name": "Drinks",
+    "path": "words/Food&Drinks/Drinks.json"
+  },
+  {
+    "group": "Food & Drinks",
+    "name": "Foods",
+    "path": "words/Food&Drinks/Foods.json"
+  },
+  {
+    "group": "Food & Drinks",
+    "name": "Vegetables",
+    "path": "words/Food&Drinks/Vegetables.json"
+  },
+  {
+    "group": "Harry Potter",
+    "name": "Characters",
+    "path": "words/HarryPotter/Characters.json"
+  },
+  {
+    "group": "Harry Potter",
+    "name": "General",
+    "path": "words/HarryPotter/General.json"
+  },
+  {
+    "group": "Harry Potter",
+    "name": "Spells",
+    "path": "words/HarryPotter/Spells.json"
+  },
+  {
+    "group": "Languages",
+    "name": "French",
+    "path": "words/Languages/French.json"
+  },
+  {
+    "group": "Languages",
+    "name": "German",
+    "path": "words/Languages/German.json"
+  },
+  {
+    "group": "Languages",
+    "name": "Korean",
+    "path": "words/Languages/Korean.json"
+  },
+  {
+    "group": "Languages",
+    "name": "Spanish",
+    "path": "words/Languages/Spanish.json"
+  },
+  {
+    "group": "Miscellaneous",
+    "name": "Meme",
+    "path": "words/Miscellaneous/Meme.json"
+  },
+  {
+    "group": "Miscellaneous",
+    "name": "NSFW",
+    "path": "words/Miscellaneous/NSFW.json"
+  },
+  {
+    "group": "Miscellaneous",
+    "name": "Random Items",
+    "path": "words/Miscellaneous/RandomItemsObjects.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Action",
+    "path": "words/Movies&Shows/Aciton.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Comedy",
+    "path": "words/Movies&Shows/Comedy.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Crime",
+    "path": "words/Movies&Shows/Crime.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "DC Universe",
+    "path": "words/Movies&Shows/DCUniverse.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Horror",
+    "path": "words/Movies&Shows/Horror.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Marvel",
+    "path": "words/Movies&Shows/Marvel.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "Netflix",
+    "path": "words/Movies&Shows/Netflix.json"
+  },
+  {
+    "group": "Movies & Shows",
+    "name": "TV Series",
+    "path": "words/Movies&Shows/TVSeries.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 1",
+    "path": "words/Pokemon/Gen1.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 2",
+    "path": "words/Pokemon/Gen2.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 3",
+    "path": "words/Pokemon/Gen3.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 4",
+    "path": "words/Pokemon/Gen4.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 5",
+    "path": "words/Pokemon/Gen5.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 6",
+    "path": "words/Pokemon/Gen6.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 7",
+    "path": "words/Pokemon/Gen7.json"
+  },
+  {
+    "group": "Pokémon",
+    "name": "Gen 8",
+    "path": "words/Pokemon/Gen8.json"
+  },
+  {
+    "group": "Sports",
+    "name": "Athletes",
+    "path": "words/Sports/Athletes.json"
+  },
+  {
+    "group": "Sports",
+    "name": "Sports",
+    "path": "words/Sports/Sports.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Fortnite",
+    "path": "words/VideoGames/Fortnite.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "League of Legends",
+    "path": "words/VideoGames/League of Legends.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "League of Legends (2)",
+    "path": "words/VideoGames/LeagueOfLegends.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Minecraft",
+    "path": "words/VideoGames/Minecraft.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Mobile Legends",
+    "path": "words/VideoGames/MobileLegends.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Nintendo",
+    "path": "words/VideoGames/Nintendo.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Overwatch Heroes",
+    "path": "words/VideoGames/Overwatch Heroes.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Roblox",
+    "path": "words/VideoGames/Roblox.json"
+  },
+  {
+    "group": "Video Games",
+    "name": "Super Smash Bros",
+    "path": "words/VideoGames/SuperSmashBrosUltimate.json"
+  }
+]

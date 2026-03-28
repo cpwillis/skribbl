@@ -660,7 +660,7 @@ async function init() {
     initStorageBanner();
 
     // Fetch manifest
-    const res = await fetch('word_lists/manifest.json');
+    const res = await fetch('words/manifest.json');
     manifest = await res.json();
 
     // Build shared picker and init tools

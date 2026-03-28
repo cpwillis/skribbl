@@ -1,3 +1,7 @@
-/wrangler.jsonc  /404.html  404
-/README.md       /404.html  404
-/LICENSE         /404.html  404
+/wrangler.jsonc          /404.html  404
+/README.md               /404.html  404
+/LICENSE                 /404.html  404
+/.gitignore              /404.html  404
+/.vscode/settings.json   /404.html  404
+/_headers                /404.html  404
+/_redirects              /404.html  404

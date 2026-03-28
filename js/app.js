@@ -15,7 +15,6 @@ const SEARCH_PAGE_SIZE = 50;
 // Pagination state for unlimited scroll
 const searchPage = {
     words: [],
-    regex: null,
     rendered: 0,
 };
 
@@ -146,37 +145,6 @@ function countToBlanks(count) {
     return trimmed.split(/\s+/).map(n => '*'.repeat(parseInt(n, 10))).join(' ');
 }
 
-function buildHighlightedChip(word, regex) {
-    const chip = document.createElement('span');
-    chip.className = 'word-chip';
-
-    if (regex) {
-        // Re-run regex to get match groups for highlighting
-        const m = word.match(regex);
-        if (m && m.index !== undefined) {
-            // Highlight only captured groups (wildcard positions)
-            let result = '';
-            let pos = 0;
-            const full = m[0];
-            // Find individual group positions within the full match
-            // Use the regex source to determine wildcard positions in the original pattern
-            result = word; // fallback — just use plain text
-            // For simplicity: bold the matched portion if it differs from raw in case
-            chip.innerHTML = escapeHtml(word);
-        } else {
-            chip.textContent = word;
-        }
-    } else {
-        chip.textContent = word;
-    }
-
-    const len = document.createElement('span');
-    len.className = 'chip-len';
-    len.textContent = word.replace(/ /g, '').length;
-    chip.appendChild(len);
-    return chip;
-}
-
 function buildWordChip(word) {
     const chip = document.createElement('span');
     chip.className = 'word-chip';
@@ -293,62 +261,28 @@ async function refreshPool() {
 // ── SEARCH SECTION ─────────────────────────────────────────
 
 function runSearch() {
-    const pattern = dom.searchBlanks.value.trim();
-    const minLen = parseInt(dom.searchMinLen.value) || 0;
-    const maxLen = parseInt(dom.searchMaxLen.value) || 0;
-
-    let pool = appState.pool;
-
-    // Apply length filter
-    pool = applyLengthFilter(pool, minLen, maxLen);
-
-    if (!pattern) {
-        renderSearchResults(pool, null);
-        return;
-    }
-
-    let regex;
-    try { regex = blanksToRegex(pattern); }
-    catch { renderSearchResults([], null); return; }
-
-    const matched = pool.filter(w => regex.test(w));
-    renderSearchResults(matched, regex);
+    const emptyMsg = appState.pool.length
+        ? 'No matches found. Try a different pattern.'
+        : 'Select one or more word lists to search.';
+    runPatternFilter(appState.pool, dom.searchBlanks, dom.searchMinLen, dom.searchMaxLen, blanksToRegex,
+        words => renderResults(words, searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches', emptyMsg));
 }
 
-function renderSearchResults(words, regex) {
-    const paginated = words.length > SEARCH_PAGE_SIZE;
-
-    // Update count label
-    if (words.length) {
-        const countText = `${words.length} match${words.length === 1 ? '' : 'es'}`;
-        if (paginated) {
-            dom.searchResultCount.textContent = `Showing ${SEARCH_PAGE_SIZE} of ${countText} — scroll to load more`;
-        } else {
-            dom.searchResultCount.textContent = countText;
-        }
-    } else {
-        dom.searchResultCount.textContent = '';
-    }
-
-    dom.searchResults.innerHTML = '';
-
+function renderResults(words, pageState, resultsEl, countEl, singular, plural, emptyMsg) {
+    resultsEl.innerHTML = '';
+    countEl.textContent = '';
     if (!words.length) {
-        searchPage.words = [];
-        searchPage.rendered = 0;
+        pageState.words = [];
+        pageState.rendered = 0;
         const em = document.createElement('span');
         em.className = 'empty-state';
-        em.textContent = appState.pool.length
-            ? 'No matches found. Try a different pattern.'
-            : 'Select one or more word lists to search.';
-        dom.searchResults.appendChild(em);
+        em.textContent = emptyMsg;
+        resultsEl.appendChild(em);
         return;
     }
-
-    // Always paginate
-    searchPage.words = words;
-    searchPage.regex = regex;
-    searchPage.rendered = 0;
-    appendPage(searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches');
+    pageState.words = words;
+    pageState.rendered = 0;
+    appendPage(pageState, resultsEl, countEl, singular, plural);
 }
 
 function appendPage(state, resultsEl, countEl, singular, plural) {
@@ -371,7 +305,73 @@ function appendPage(state, resultsEl, countEl, singular, plural) {
     }
 }
 
+function runPatternFilter(pool, patternEl, minLenEl, maxLenEl, toRegexFn, onResults) {
+    const pattern = patternEl.value.trim();
+    const minLen = parseInt(minLenEl.value) || 0;
+    const maxLen = parseInt(maxLenEl.value) || 0;
+    const filtered = applyLengthFilter(pool, minLen, maxLen);
+    if (!pattern) { onResults(filtered); return; }
+    let regex;
+    try { regex = toRegexFn(pattern); } catch { onResults([]); return; }
+    onResults(filtered.filter(w => regex.test(w)));
+}
+
+function shuffleResultChips(resultsEl) {
+    const chips = Array.from(resultsEl.querySelectorAll('.word-chip'));
+    if (!chips.length) return;
+    const shuffled = fisher_yates_shuffle(chips);
+    resultsEl.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    shuffled.forEach(c => frag.appendChild(c));
+    resultsEl.appendChild(frag);
+}
+
+function initScrollPagination(el, pageState, countEl, singular, plural) {
+    el.addEventListener('scroll', () => {
+        if (!pageState.words.length) return;
+        if (pageState.rendered >= pageState.words.length) return;
+        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
+            appendPage(pageState, el, countEl, singular, plural);
+        }
+    });
+}
+
+function initBlanksCountSearch({ blanksEl, countEl, clearBtn, minLenEl, maxLenEl, shuffleBtn, resultsEl, onSearch }) {
+    function clear() {
+        blanksEl.value = '';
+        countEl.value = '';
+        onSearch();
+    }
+    blanksEl.addEventListener('input', debounce(() => {
+        countEl.value = blanksToCount(blanksEl.value);
+        onSearch();
+    }, 150));
+    countEl.addEventListener('input', debounce(() => {
+        const newBlanks = countToBlanks(countEl.value);
+        if (newBlanks || !countEl.value.trim()) blanksEl.value = newBlanks;
+        onSearch();
+    }, 150));
+    minLenEl.addEventListener('input', debounce(onSearch, 150));
+    maxLenEl.addEventListener('input', debounce(onSearch, 150));
+    clearBtn.addEventListener('click', () => { clear(); blanksEl.focus(); });
+    [blanksEl, countEl].forEach(el => {
+        el.addEventListener('keydown', e => { if (e.key === 'Escape') clear(); });
+    });
+    if (shuffleBtn && resultsEl) {
+        shuffleBtn.addEventListener('click', () => shuffleResultChips(resultsEl));
+    }
+}
+
+function setActivePreset(preset) {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    const target = document.querySelector(`.preset-btn[data-preset="${preset}"]`);
+    if (target) target.classList.add('active');
+    activePreset = preset;
+    dom.customCountWrap.classList.toggle('hidden', activePreset !== 'custom');
+}
+
 function initSearchTab() {
+    document.getElementById('search-pattern-row').replaceWith(buildPatternRow('search'));
     dom.searchBlanks = document.getElementById('search-blanks');
     dom.searchCount = document.getElementById('search-count');
     dom.searchResults = document.getElementById('search-results');
@@ -380,61 +380,19 @@ function initSearchTab() {
     dom.searchMaxLen = document.getElementById('search-max-len');
     dom.searchShuffleBtn = document.getElementById('search-shuffle-btn');
     dom.searchClearBtn = document.getElementById('search-clear');
-    function clearSearch() {
-        dom.searchBlanks.value = '';
-        dom.searchCount.value = '';
-        runSearch();
-    }
 
-    // Blanks → sync count → search
-    dom.searchBlanks.addEventListener('input', debounce(() => {
-        dom.searchCount.value = blanksToCount(dom.searchBlanks.value);
-        runSearch();
-    }, 150));
-
-    // Count → sync blanks → search
-    dom.searchCount.addEventListener('input', debounce(() => {
-        const newBlanks = countToBlanks(dom.searchCount.value);
-        if (newBlanks || !dom.searchCount.value.trim()) {
-            dom.searchBlanks.value = newBlanks;
-        }
-        runSearch();
-    }, 150));
-
-    dom.searchMinLen.addEventListener('input', debounce(runSearch, 150));
-    dom.searchMaxLen.addEventListener('input', debounce(runSearch, 150));
-
-    // Scroll-to-load-more for paginated (unlimited) mode
-    dom.searchResults.addEventListener('scroll', () => {
-        if (!searchPage.words.length) return;
-        if (searchPage.rendered >= searchPage.words.length) return;
-        const el = dom.searchResults;
-        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
-            appendPage(searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches');
-        }
+    initBlanksCountSearch({
+        blanksEl: dom.searchBlanks,
+        countEl: dom.searchCount,
+        clearBtn: dom.searchClearBtn,
+        minLenEl: dom.searchMinLen,
+        maxLenEl: dom.searchMaxLen,
+        shuffleBtn: dom.searchShuffleBtn,
+        resultsEl: dom.searchResults,
+        onSearch: runSearch,
     });
 
-    dom.searchClearBtn.addEventListener('click', () => {
-        clearSearch();
-        dom.searchBlanks.focus();
-    });
-
-    dom.searchShuffleBtn.addEventListener('click', () => {
-        const chips = Array.from(dom.searchResults.querySelectorAll('.word-chip'));
-        if (!chips.length) return;
-        const shuffled = fisher_yates_shuffle(chips);
-        dom.searchResults.innerHTML = '';
-        const frag = document.createDocumentFragment();
-        shuffled.forEach(c => frag.appendChild(c));
-        dom.searchResults.appendChild(frag);
-    });
-
-    // Keyboard: Escape clears both fields
-    [dom.searchBlanks, dom.searchCount].forEach(input => {
-        input.addEventListener('keydown', e => {
-            if (e.key === 'Escape') clearSearch();
-        });
-    });
+    initScrollPagination(dom.searchResults, searchPage, dom.searchResultCount, 'match', 'matches');
 }
 
 // ── BUILDER SECTION ────────────────────────────────────────
@@ -462,34 +420,10 @@ function renderBuilderPreview() {
     const words = filterText
         ? builderState.working.filter(w => w.toLowerCase().includes(filterText))
         : builderState.working;
-
-    dom.builderResults.innerHTML = '';
-
-    if (!words.length) {
-        const em = document.createElement('span');
-        em.className = 'empty-state';
-        em.textContent = appState.pool.length
-            ? 'No words match the current filters.'
-            : 'Select one or more word lists to build a set.';
-        dom.builderResults.appendChild(em);
-        dom.builderResultCount.textContent = '';
-        builderPage.words = [];
-        builderPage.rendered = 0;
-        return;
-    }
-
-    if (words.length > SEARCH_PAGE_SIZE) {
-        builderPage.words = words;
-        builderPage.rendered = 0;
-        appendPage(builderPage, dom.builderResults, dom.builderResultCount, 'word', 'words');
-    } else {
-        builderPage.words = [];
-        builderPage.rendered = 0;
-        dom.builderResultCount.textContent = `${words.length} word${words.length === 1 ? '' : 's'}`;
-        const frag = document.createDocumentFragment();
-        for (const w of words) frag.appendChild(buildWordChip(w));
-        dom.builderResults.appendChild(frag);
-    }
+    const emptyMsg = appState.pool.length
+        ? 'No words match the current filters.'
+        : 'Select one or more word lists to build a set.';
+    renderResults(words, builderPage, dom.builderResults, dom.builderResultCount, 'word', 'words', emptyMsg);
 }
 
 function initBuilderTab() {
@@ -512,10 +446,7 @@ function initBuilderTab() {
     // Preset buttons
     document.querySelectorAll('.preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            activePreset = btn.dataset.preset;
-            dom.customCountWrap.classList.toggle('hidden', activePreset !== 'custom');
+            setActivePreset(btn.dataset.preset);
             applyBuilderPreset();
         });
     });
@@ -530,15 +461,7 @@ function initBuilderTab() {
     dom.builderMaxLen.addEventListener('input', debounce(applyBuilderPreset, 150));
     dom.builderFilterInput.addEventListener('input', debounce(renderBuilderPreview, 100));
 
-    // Scroll-to-load-more for paginated mode
-    dom.builderResults.addEventListener('scroll', () => {
-        if (!builderPage.words.length) return;
-        if (builderPage.rendered >= builderPage.words.length) return;
-        const el = dom.builderResults;
-        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
-            appendPage(builderPage, dom.builderResults, dom.builderResultCount, 'word', 'words');
-        }
-    });
+    initScrollPagination(dom.builderResults, builderPage, dom.builderResultCount, 'word', 'words');
 
     dom.builderFilterClear.addEventListener('click', () => {
         dom.builderFilterInput.value = '';
@@ -639,13 +562,7 @@ function restoreCombo(combo) {
     combo.paths.forEach(p => appState.selectedPaths.add(p));
     syncPickerCheckboxes('list-picker', appState);
 
-    // Restore preset
-    const presetBtns = document.querySelectorAll('.preset-btn');
-    presetBtns.forEach(b => b.classList.remove('active'));
-    const target = document.querySelector(`.preset-btn[data-preset="${combo.preset || '50'}"]`);
-    if (target) { target.classList.add('active'); activePreset = combo.preset || '50'; }
-    dom.customCountWrap.classList.toggle('hidden', activePreset !== 'custom');
-
+    setActivePreset(combo.preset || '50');
     refreshPool();
 }
 
@@ -675,13 +592,8 @@ function applyShareState(state) {
     state.paths.forEach(p => appState.selectedPaths.add(p));
     syncPickerCheckboxes('list-picker', appState);
 
-    const presetBtns = document.querySelectorAll('.preset-btn');
-    presetBtns.forEach(b => b.classList.remove('active'));
-    const matchPreset = state.preset || '50';
-    const target = document.querySelector(`.preset-btn[data-preset="${matchPreset}"]`);
-    if (target) { target.classList.add('active'); activePreset = matchPreset; }
+    setActivePreset(state.preset || '50');
     if (state.custom && dom.customCountInput) dom.customCountInput.value = state.custom;
-    dom.customCountWrap?.classList.toggle('hidden', activePreset !== 'custom');
 
     return true;
 }
@@ -781,57 +693,11 @@ function saveCustomWordsToStorage(words) {
 }
 
 function runCustomSearch() {
-    const pattern = dom.customSearchInput.value.trim();
-    const minLen = parseInt(dom.customSearchMinLen.value) || 0;
-    const maxLen = parseInt(dom.customSearchMaxLen.value) || 0;
-
-    let pool = applyLengthFilter(customState.words, minLen, maxLen);
-
-    if (!pattern) {
-        renderCustomResults(pool, null);
-        return;
-    }
-
-    let regex;
-    try { regex = patternToRegex(pattern); }
-    catch { renderCustomResults([], null); return; }
-
-    const matched = pool.filter(w => regex.test(w));
-    renderCustomResults(matched, regex);
-}
-
-function renderCustomResults(words, _regex) {
-    const paginated = words.length > SEARCH_PAGE_SIZE;
-
-    if (words.length) {
-        const countText = `${words.length} match${words.length === 1 ? '' : 'es'}`;
-        if (paginated) {
-            dom.customResultCount.textContent = `Showing ${SEARCH_PAGE_SIZE} of ${countText} — scroll to load more`;
-        } else {
-            dom.customResultCount.textContent = countText;
-        }
-    } else {
-        dom.customResultCount.textContent = '';
-    }
-
-    dom.customResults.innerHTML = '';
-
-    if (!words.length) {
-        const em = document.createElement('span');
-        em.className = 'empty-state';
-        em.textContent = customState.words.length
-            ? 'No matches found. Try a different pattern.'
-            : 'Paste words above and save to search.';
-        dom.customResults.appendChild(em);
-        customPage.words = [];
-        customPage.rendered = 0;
-        return;
-    }
-
-    // Always paginate
-    customPage.words = words;
-    customPage.rendered = 0;
-    appendPage(customPage, dom.customResults, dom.customResultCount, 'match', 'matches');
+    const emptyMsg = customState.words.length
+        ? 'No matches found. Try a different pattern.'
+        : 'Paste words above and save to search.';
+    runPatternFilter(customState.words, dom.customBlanks, dom.customSearchMinLen, dom.customSearchMaxLen, blanksToRegex,
+        words => renderResults(words, customPage, dom.customResults, dom.customResultCount, 'match', 'matches', emptyMsg));
 }
 
 function updateCustomWordCount() {
@@ -844,13 +710,15 @@ function initCustomTab() {
     dom.customWordCountLabel = document.getElementById('custom-word-count');
     dom.customWordsSave = document.getElementById('custom-words-save');
     dom.customWordsClear = document.getElementById('custom-words-clear');
-    dom.customSearchInput = document.getElementById('custom-search-input');
-    dom.customSearchClear = document.getElementById('custom-search-clear');
     dom.customSearchMinLen = document.getElementById('custom-search-min-len');
     dom.customSearchMaxLen = document.getElementById('custom-search-max-len');
     dom.customResultCount = document.getElementById('custom-result-count');
     dom.customResults = document.getElementById('custom-results');
     dom.customShuffleBtn = document.getElementById('custom-shuffle-btn');
+    document.getElementById('custom-pattern-row').replaceWith(buildPatternRow('custom'));
+    dom.customBlanks = document.getElementById('custom-blanks');
+    dom.customCount = document.getElementById('custom-count');
+    dom.customSearchClear = document.getElementById('custom-clear');
 
     // Restore persisted words into textarea
     customState.words = loadCustomWordsFromStorage();
@@ -881,42 +749,18 @@ function initCustomTab() {
         runCustomSearch();
     });
 
-    // Scroll-to-load-more for paginated mode
-    dom.customResults.addEventListener('scroll', () => {
-        if (!customPage.words.length) return;
-        if (customPage.rendered >= customPage.words.length) return;
-        const el = dom.customResults;
-        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
-            appendPage(customPage, dom.customResults, dom.customResultCount, 'match', 'matches');
-        }
+    initBlanksCountSearch({
+        blanksEl: dom.customBlanks,
+        countEl: dom.customCount,
+        clearBtn: dom.customSearchClear,
+        minLenEl: dom.customSearchMinLen,
+        maxLenEl: dom.customSearchMaxLen,
+        shuffleBtn: dom.customShuffleBtn,
+        resultsEl: dom.customResults,
+        onSearch: runCustomSearch,
     });
 
-    dom.customSearchInput.addEventListener('input', debounce(runCustomSearch, 150));
-    dom.customSearchMinLen.addEventListener('input', debounce(runCustomSearch, 150));
-    dom.customSearchMaxLen.addEventListener('input', debounce(runCustomSearch, 150));
-
-    dom.customSearchClear.addEventListener('click', () => {
-        dom.customSearchInput.value = '';
-        dom.customSearchInput.focus();
-        runCustomSearch();
-    });
-
-    dom.customSearchInput.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-            dom.customSearchInput.value = '';
-            runCustomSearch();
-        }
-    });
-
-    dom.customShuffleBtn.addEventListener('click', () => {
-        const chips = Array.from(dom.customResults.querySelectorAll('.word-chip'));
-        if (!chips.length) return;
-        const shuffled = fisher_yates_shuffle(chips);
-        dom.customResults.innerHTML = '';
-        const frag = document.createDocumentFragment();
-        shuffled.forEach(c => frag.appendChild(c));
-        dom.customResults.appendChild(frag);
-    });
+    initScrollPagination(dom.customResults, customPage, dom.customResultCount, 'match', 'matches');
 }
 
 // ── Tab switching ─────────────────────────────────────────

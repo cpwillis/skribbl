@@ -291,49 +291,7 @@
               role="tabpanel"
               aria-labelledby="tab-btn-search"
             >
-              <div class="pattern-row">
-                <div class="pattern-col pattern-input-blanks">
-                  <span class="pattern-col-label"
-                    >Search by Letters & Blanks
-                  </span>
-                  <div class="pattern-input-wrap">
-                    <input
-                      type="text"
-                      id="search-blanks"
-                      placeholder="Rom** *n* ***iet"
-                      autocomplete="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      aria-label="Search by blanks"
-                    />
-                  </div>
-                </div>
-                <div class="pattern-col pattern-input-count">
-                  <span class="pattern-col-label">Letter Count</span>
-                  <div class="pattern-input-wrap">
-                    <input
-                      type="text"
-                      id="search-count"
-                      placeholder="5 3 6"
-                      autocomplete="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      aria-label="Letter count"
-                    />
-                  </div>
-                </div>
-                <div class="pattern-col pattern-clear-col">
-                  <span class="pattern-col-label" aria-hidden="true"></span>
-                  <button
-                    class="clear-btn"
-                    id="search-clear"
-                    aria-label="Clear search"
-                    title="Clear (Esc)"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
+              <div id="search-pattern-row"></div>
 
               <div class="len-filter">
                 <label for="search-min-len">Length filter:</label>
@@ -560,39 +518,7 @@
 
               <hr class="divider" />
 
-              <p
-                style="
-                  font-size: 0.82rem;
-                  color: var(--text-muted);
-                  margin-bottom: 0.25rem;
-                "
-              >
-                Enter the hint provided by skribbl.io — use <code>_</code> or
-                <code>?</code> for unknown letters, <code>*</code> for multiple
-                unknowns. Or enter letter counts like <code>3 4</code>.
-              </p>
-
-              <div class="pattern-row">
-                <div class="pattern-input-wrap">
-                  <input
-                    type="text"
-                    id="custom-search-input"
-                    placeholder="e.g. _oa__ or 3 4"
-                    autocomplete="off"
-                    autocorrect="off"
-                    spellcheck="false"
-                    aria-label="Custom hint pattern input"
-                  />
-                  <button
-                    class="clear-btn"
-                    id="custom-search-clear"
-                    aria-label="Clear search input"
-                    title="Clear (Esc)"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
+              <div id="custom-pattern-row"></div>
 
               <div class="len-filter">
                 <label for="custom-search-min-len">Length filter:</label>
@@ -673,6 +599,52 @@
       </p>
     </footer>
 
+    <!-- Shared pattern-row template — instantiated per tab by search-panel.js -->
+    <template id="tpl-pattern-row">
+      <div class="pattern-row">
+        <div class="pattern-col pattern-input-blanks">
+          <span class="pattern-col-label">Search by Letters &amp; Blanks</span>
+          <div class="pattern-input-wrap">
+            <input
+              type="text"
+              data-id="blanks"
+              placeholder="Rom** *n* ***iet"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+              aria-label="Search by blanks"
+            />
+          </div>
+        </div>
+        <div class="pattern-col pattern-input-count">
+          <span class="pattern-col-label">Letter Count</span>
+          <div class="pattern-input-wrap">
+            <input
+              type="text"
+              data-id="count"
+              placeholder="5 3 6"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+              aria-label="Letter count"
+            />
+          </div>
+        </div>
+        <div class="pattern-col pattern-clear-col">
+          <span class="pattern-col-label" aria-hidden="true"></span>
+          <button
+            class="clear-btn"
+            data-id="clear"
+            aria-label="Clear search"
+            title="Clear (Esc)"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <script src="js/search-panel.js"></script>
     <script src="js/app.js"></script>
     <script src="js/pwa.js"></script>
     <!-- Cloudflare Web Analytics -->

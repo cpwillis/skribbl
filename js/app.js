@@ -348,68 +348,26 @@ function renderSearchResults(words, regex) {
     searchPage.words = words;
     searchPage.regex = regex;
     searchPage.rendered = 0;
-    appendSearchPage();
+    appendPage(searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches');
 }
 
-function appendSearchPage() {
-    const { words, rendered } = searchPage;
+function appendPage(state, resultsEl, countEl, singular, plural) {
+    const { words, rendered } = state;
     const next = words.slice(rendered, rendered + SEARCH_PAGE_SIZE);
     const frag = document.createDocumentFragment();
     for (const w of next) frag.appendChild(buildWordChip(w));
-    dom.searchResults.appendChild(frag);
-    searchPage.rendered += next.length;
+    resultsEl.appendChild(frag);
+    state.rendered += next.length;
 
-    // Update count label while scrolling
-    if (searchPage.rendered < words.length) {
-        dom.searchResultCount.textContent =
-            `Showing ${searchPage.rendered} of ${words.length} match${words.length === 1 ? '' : 'es'} — scroll to load more`;
+    const noun = words.length === 1 ? singular : plural;
+    if (state.rendered < words.length) {
+        countEl.textContent = `Showing ${state.rendered} of ${words.length} ${noun} — scroll to load more`;
         // If the container still isn't scrollable, keep loading until it is
-        if (dom.searchResults.scrollHeight <= dom.searchResults.clientHeight) {
-            appendSearchPage();
+        if (resultsEl.scrollHeight <= resultsEl.clientHeight) {
+            appendPage(state, resultsEl, countEl, singular, plural);
         }
     } else {
-        dom.searchResultCount.textContent =
-            `${words.length} match${words.length === 1 ? '' : 'es'}`;
-    }
-}
-
-function appendBuilderPage() {
-    const { words, rendered } = builderPage;
-    const next = words.slice(rendered, rendered + SEARCH_PAGE_SIZE);
-    const frag = document.createDocumentFragment();
-    for (const w of next) frag.appendChild(buildWordChip(w));
-    dom.builderResults.appendChild(frag);
-    builderPage.rendered += next.length;
-
-    if (builderPage.rendered < words.length) {
-        dom.builderResultCount.textContent =
-            `Showing ${builderPage.rendered} of ${words.length} word${words.length === 1 ? '' : 's'} — scroll to load more`;
-        if (dom.builderResults.scrollHeight <= dom.builderResults.clientHeight) {
-            appendBuilderPage();
-        }
-    } else {
-        dom.builderResultCount.textContent =
-            `${words.length} word${words.length === 1 ? '' : 's'}`;
-    }
-}
-
-function appendCustomPage() {
-    const { words, rendered } = customPage;
-    const next = words.slice(rendered, rendered + SEARCH_PAGE_SIZE);
-    const frag = document.createDocumentFragment();
-    for (const w of next) frag.appendChild(buildWordChip(w));
-    dom.customResults.appendChild(frag);
-    customPage.rendered += next.length;
-
-    if (customPage.rendered < words.length) {
-        dom.customResultCount.textContent =
-            `Showing ${customPage.rendered} of ${words.length} match${words.length === 1 ? '' : 'es'} — scroll to load more`;
-        if (dom.customResults.scrollHeight <= dom.customResults.clientHeight) {
-            appendCustomPage();
-        }
-    } else {
-        dom.customResultCount.textContent =
-            `${words.length} match${words.length === 1 ? '' : 'es'}`;
+        countEl.textContent = `${words.length} ${noun}`;
     }
 }
 
@@ -452,7 +410,7 @@ function initSearchTab() {
         if (searchPage.rendered >= searchPage.words.length) return;
         const el = dom.searchResults;
         if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
-            appendSearchPage();
+            appendPage(searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches');
         }
     });
 
@@ -523,7 +481,7 @@ function renderBuilderPreview() {
     if (words.length > SEARCH_PAGE_SIZE) {
         builderPage.words = words;
         builderPage.rendered = 0;
-        appendBuilderPage();
+        appendPage(builderPage, dom.builderResults, dom.builderResultCount, 'word', 'words');
     } else {
         builderPage.words = [];
         builderPage.rendered = 0;
@@ -578,7 +536,7 @@ function initBuilderTab() {
         if (builderPage.rendered >= builderPage.words.length) return;
         const el = dom.builderResults;
         if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
-            appendBuilderPage();
+            appendPage(builderPage, dom.builderResults, dom.builderResultCount, 'word', 'words');
         }
     });
 
@@ -873,7 +831,7 @@ function renderCustomResults(words, _regex) {
     // Always paginate
     customPage.words = words;
     customPage.rendered = 0;
-    appendCustomPage();
+    appendPage(customPage, dom.customResults, dom.customResultCount, 'match', 'matches');
 }
 
 function updateCustomWordCount() {
@@ -929,7 +887,7 @@ function initCustomTab() {
         if (customPage.rendered >= customPage.words.length) return;
         const el = dom.customResults;
         if (el.scrollTop + el.clientHeight >= el.scrollHeight - 200) {
-            appendCustomPage();
+            appendPage(customPage, dom.customResults, dom.customResultCount, 'match', 'matches');
         }
     });
 

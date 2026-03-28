@@ -10,14 +10,12 @@ const listCache = new Map();   // path → string[]
 let manifest = [];             // [{group, name, path}]
 
 // ── Shared state ──────────────────────────────────────────
-const searchState = {
+const appState = {
     selectedPaths: new Set(),
     pool: [],          // merged+deduped words for this selection
 };
 
 const builderState = {
-    selectedPaths: new Set(),
-    pool: [],          // merged+deduped words
     working: [],       // sliced + possibly shuffled
     shuffled: false,
 };
@@ -238,21 +236,22 @@ function syncPickerCheckboxes(containerId, state) {
     });
 }
 
-// ── SEARCH SECTION ─────────────────────────────────────────
-let searchDebounce = null;
-
-async function refreshSearchPool() {
-    searchState.pool = await loadSelectedLists([...searchState.selectedPaths]);
-    dom.searchWordCount.textContent = `${searchState.pool.length} words loaded`;
+// ── SHARED POOL REFRESH ──────────────────────────────────
+async function refreshPool() {
+    appState.pool = await loadSelectedLists([...appState.selectedPaths]);
+    dom.wordCount.textContent = `${appState.pool.length} words loaded`;
     runSearch();
+    applyBuilderPreset();
 }
+
+// ── SEARCH SECTION ─────────────────────────────────────────
 
 function runSearch() {
     const pattern = dom.searchInput.value.trim();
     const minLen = parseInt(dom.searchMinLen.value) || 0;
     const maxLen = parseInt(dom.searchMaxLen.value) || 0;
 
-    let pool = searchState.pool;
+    let pool = appState.pool;
 
     // Apply length filter
     pool = applyLengthFilter(pool, minLen, maxLen);
@@ -277,7 +276,7 @@ function renderSearchResults(words, regex) {
     if (!words.length) {
         const em = document.createElement('span');
         em.className = 'empty-state';
-        em.textContent = searchState.pool.length
+        em.textContent = appState.pool.length
             ? 'No matches found. Try a different pattern.'
             : 'Select one or more word lists to search.';
         dom.searchResults.appendChild(em);
@@ -291,20 +290,14 @@ function renderSearchResults(words, regex) {
     dom.searchResults.appendChild(frag);
 }
 
-function initSearch() {
+function initSearchTab() {
     dom.searchInput = document.getElementById('search-input');
     dom.searchResults = document.getElementById('search-results');
     dom.searchResultCount = document.getElementById('search-result-count');
-    dom.searchWordCount = document.getElementById('search-word-count');
     dom.searchMinLen = document.getElementById('search-min-len');
     dom.searchMaxLen = document.getElementById('search-max-len');
     dom.searchShuffleBtn = document.getElementById('search-shuffle-btn');
     dom.searchClearBtn = document.getElementById('search-clear-btn');
-    dom.searchSelectAll = document.getElementById('search-select-all');
-    dom.searchClearAll = document.getElementById('search-clear-all');
-    dom.searchSurpriseBtn = document.getElementById('search-surprise-btn');
-
-    buildListPicker('search-list-picker', searchState, () => refreshSearchPool());
 
     dom.searchInput.addEventListener('input', debounce(runSearch, 150));
     dom.searchMinLen.addEventListener('input', debounce(runSearch, 150));
@@ -326,31 +319,6 @@ function initSearch() {
         dom.searchResults.appendChild(frag);
     });
 
-    dom.searchSelectAll.addEventListener('click', () => {
-        manifest.forEach(e => searchState.selectedPaths.add(e.path));
-        syncPickerCheckboxes('search-list-picker', searchState);
-        refreshSearchPool();
-    });
-
-    dom.searchClearAll.addEventListener('click', () => {
-        searchState.selectedPaths.clear();
-        syncPickerCheckboxes('search-list-picker', searchState);
-        searchState.pool = [];
-        dom.searchWordCount.textContent = '0 words loaded';
-        runSearch();
-    });
-
-    dom.searchSurpriseBtn.addEventListener('click', () => {
-        if (!manifest.length) return;
-        const pick = manifest[Math.floor(Math.random() * manifest.length)];
-        searchState.selectedPaths.clear();
-        searchState.selectedPaths.add(pick.path);
-        syncPickerCheckboxes('search-list-picker', searchState);
-        refreshSearchPool().then(() => {
-            dom.searchSurpriseBtn.title = `Loaded: ${pick.name}`;
-        });
-    });
-
     // Keyboard: Escape clears
     dom.searchInput.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
@@ -363,16 +331,10 @@ function initSearch() {
 // ── BUILDER SECTION ────────────────────────────────────────
 let activePreset = '50';
 
-async function refreshBuilderPool() {
-    builderState.pool = await loadSelectedLists([...builderState.selectedPaths]);
-    dom.builderWordCount.textContent = `${builderState.pool.length} words loaded`;
-    applyBuilderPreset();
-}
-
 function applyBuilderPreset() {
     const minLen = parseInt(dom.builderMinLen.value) || 0;
     const maxLen = parseInt(dom.builderMaxLen.value) || 0;
-    let pool = applyLengthFilter(builderState.pool, minLen, maxLen);
+    let pool = applyLengthFilter(appState.pool, minLen, maxLen);
 
     if (activePreset === 'all') {
         builderState.working = pool.slice();
@@ -397,7 +359,7 @@ function renderBuilderPreview() {
     if (!words.length) {
         const em = document.createElement('span');
         em.className = 'empty-state';
-        em.textContent = builderState.pool.length
+        em.textContent = appState.pool.length
             ? 'No words match the current filters.'
             : 'Select one or more word lists to build a set.';
         dom.builderResults.appendChild(em);
@@ -411,8 +373,7 @@ function renderBuilderPreview() {
     dom.builderResults.appendChild(frag);
 }
 
-function initBuilder() {
-    dom.builderWordCount = document.getElementById('builder-word-count');
+function initBuilderTab() {
     dom.builderResults = document.getElementById('builder-results');
     dom.builderResultCount = document.getElementById('builder-result-count');
     dom.builderMinLen = document.getElementById('builder-min-len');
@@ -428,11 +389,6 @@ function initBuilder() {
     dom.saveComboInput = document.getElementById('save-combo-input');
     dom.saveComboBtn = document.getElementById('save-combo-btn');
     dom.comboList = document.getElementById('combo-list');
-    dom.builderSelectAll = document.getElementById('builder-select-all');
-    dom.builderClearAll = document.getElementById('builder-clear-all');
-    dom.builderSurpriseBtn = document.getElementById('builder-surprise-btn');
-
-    buildListPicker('builder-list-picker', builderState, () => refreshBuilderPool());
 
     // Preset buttons
     document.querySelectorAll('.preset-btn').forEach(btn => {
@@ -490,35 +446,11 @@ function initBuilder() {
         navigator.clipboard.writeText(url).then(() => flashCopied(dom.shareBtn));
     });
 
-    dom.builderSelectAll.addEventListener('click', () => {
-        manifest.forEach(e => builderState.selectedPaths.add(e.path));
-        syncPickerCheckboxes('builder-list-picker', builderState);
-        refreshBuilderPool();
-    });
-
-    dom.builderClearAll.addEventListener('click', () => {
-        builderState.selectedPaths.clear();
-        syncPickerCheckboxes('builder-list-picker', builderState);
-        builderState.pool = [];
-        builderState.working = [];
-        dom.builderWordCount.textContent = '0 words loaded';
-        renderBuilderPreview();
-    });
-
-    dom.builderSurpriseBtn.addEventListener('click', () => {
-        if (!manifest.length) return;
-        const pick = manifest[Math.floor(Math.random() * manifest.length)];
-        builderState.selectedPaths.clear();
-        builderState.selectedPaths.add(pick.path);
-        syncPickerCheckboxes('builder-list-picker', builderState);
-        refreshBuilderPool();
-    });
-
     dom.saveComboBtn.addEventListener('click', () => {
         const name = dom.saveComboInput.value.trim();
-        if (!name || !builderState.selectedPaths.size) return;
+        if (!name || !appState.selectedPaths.size) return;
         const combos = loadCombos();
-        combos.push({ name, paths: [...builderState.selectedPaths], preset: activePreset });
+        combos.push({ name, paths: [...appState.selectedPaths], preset: activePreset });
         saveCombos(combos);
         dom.saveComboInput.value = '';
         renderComboList();
@@ -574,9 +506,9 @@ function renderComboList() {
 }
 
 function restoreCombo(combo) {
-    builderState.selectedPaths.clear();
-    combo.paths.forEach(p => builderState.selectedPaths.add(p));
-    syncPickerCheckboxes('builder-list-picker', builderState);
+    appState.selectedPaths.clear();
+    combo.paths.forEach(p => appState.selectedPaths.add(p));
+    syncPickerCheckboxes('list-picker', appState);
 
     // Restore preset
     const presetBtns = document.querySelectorAll('.preset-btn');
@@ -585,13 +517,13 @@ function restoreCombo(combo) {
     if (target) { target.classList.add('active'); activePreset = combo.preset || '50'; }
     dom.customCountWrap.classList.toggle('hidden', activePreset !== 'custom');
 
-    refreshBuilderPool();
+    refreshPool();
 }
 
 // ── Share URL ─────────────────────────────────────────────
 function encodeShareState() {
     const obj = {
-        paths: [...builderState.selectedPaths],
+        paths: [...appState.selectedPaths],
         preset: activePreset,
         custom: dom.customCountInput?.value || '',
     };
@@ -610,9 +542,9 @@ function applyShareState(state) {
     if (!state) return false;
     if (!state.paths?.length) return false;
 
-    builderState.selectedPaths.clear();
-    state.paths.forEach(p => builderState.selectedPaths.add(p));
-    syncPickerCheckboxes('builder-list-picker', builderState);
+    appState.selectedPaths.clear();
+    state.paths.forEach(p => appState.selectedPaths.add(p));
+    syncPickerCheckboxes('list-picker', appState);
 
     const presetBtns = document.querySelectorAll('.preset-btn');
     presetBtns.forEach(b => b.classList.remove('active'));
@@ -671,6 +603,57 @@ function showSharedBanner() {
     });
 }
 
+// ── Shared controls (picker, select-all, clear-all, surprise) ─
+function initSharedControls() {
+    dom.wordCount = document.getElementById('word-count');
+    dom.selectAll = document.getElementById('select-all');
+    dom.clearAll = document.getElementById('clear-all');
+    dom.surpriseBtn = document.getElementById('surprise-btn');
+
+    dom.selectAll.addEventListener('click', () => {
+        manifest.forEach(e => appState.selectedPaths.add(e.path));
+        syncPickerCheckboxes('list-picker', appState);
+        refreshPool();
+    });
+
+    dom.clearAll.addEventListener('click', () => {
+        appState.selectedPaths.clear();
+        syncPickerCheckboxes('list-picker', appState);
+        appState.pool = [];
+        builderState.working = [];
+        dom.wordCount.textContent = '0 words loaded';
+        runSearch();
+        renderBuilderPreview();
+    });
+
+    dom.surpriseBtn.addEventListener('click', () => {
+        if (!manifest.length) return;
+        const pick = manifest[Math.floor(Math.random() * manifest.length)];
+        appState.selectedPaths.clear();
+        appState.selectedPaths.add(pick.path);
+        syncPickerCheckboxes('list-picker', appState);
+        refreshPool().then(() => {
+            dom.surpriseBtn.title = `Loaded: ${pick.name}`;
+        });
+    });
+}
+
+// ── Tab switching ─────────────────────────────────────────
+function initTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+        });
+    });
+}
+
 // ── Main init ─────────────────────────────────────────────
 async function init() {
     initDarkMode();
@@ -680,9 +663,12 @@ async function init() {
     const res = await fetch('word_lists/manifest.json');
     manifest = await res.json();
 
-    // Build pickers
-    initSearch();
-    initBuilder();
+    // Build shared picker and init tools
+    buildListPicker('list-picker', appState, () => refreshPool());
+    initSharedControls();
+    initSearchTab();
+    initBuilderTab();
+    initTabs();
 
     // Check URL hash for shared state
     const hash = location.hash.slice(1);
@@ -690,7 +676,7 @@ async function init() {
         const shared = decodeShareState(hash);
         if (shared && applyShareState(shared)) {
             showSharedBanner();
-            await refreshBuilderPool();
+            await refreshPool();
         }
     }
 }

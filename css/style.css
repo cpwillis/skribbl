@@ -258,7 +258,7 @@ input[type="number"]:focus { border-color: var(--primary); }
 .list-picker-panel {
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  max-height: 260px;
+  max-height: 480px;
   overflow-y: auto;
   background: var(--surface2);
 }
@@ -405,7 +405,7 @@ input[type="number"]:focus { border-color: var(--primary); }
   flex-wrap: wrap;
   gap: 0.4rem;
   min-height: 48px;
-  max-height: 420px;
+  max-height: 600px;
   overflow-y: auto;
   padding: 0.25rem;
 }
@@ -449,6 +449,35 @@ input[type="number"]:focus { border-color: var(--primary); }
   padding: 0.75rem 0.25rem;
   font-style: italic;
 }
+
+/* ===== Tool Tabs ===== */
+.tool-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1.25rem;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--text-muted);
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color var(--transition), border-color var(--transition);
+}
+.tab-btn:hover { color: var(--text); background: transparent; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-btn:active { transform: none; }
+
+.tab-panel { display: flex; flex-direction: column; gap: 0.75rem; }
 
 /* ===== Builder controls ===== */
 .builder-controls {
@@ -518,7 +547,7 @@ input[type="number"]:focus { border-color: var(--primary); }
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  max-height: 160px;
+  max-height: 220px;
   overflow-y: auto;
 }
 

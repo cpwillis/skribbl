@@ -9,6 +9,9 @@
 const listCache = new Map();   // path → string[]
 let manifest = [];             // [{group, name, path}]
 
+// ── Search result limit ───────────────────────────────────
+const SEARCH_RESULT_LIMIT = 200;
+
 // ── Shared state ──────────────────────────────────────────
 const appState = {
     selectedPaths: new Set(),
@@ -270,7 +273,18 @@ function runSearch() {
 }
 
 function renderSearchResults(words, regex) {
-    dom.searchResultCount.textContent = words.length ? `${words.length} match${words.length === 1 ? '' : 'es'}` : '';
+    const limited = dom.searchLimitToggle?.checked && words.length > SEARCH_RESULT_LIMIT;
+    const display = limited ? words.slice(0, SEARCH_RESULT_LIMIT) : words;
+
+    if (words.length) {
+        const countText = `${words.length} match${words.length === 1 ? '' : 'es'}`;
+        dom.searchResultCount.textContent = limited
+            ? `Showing ${SEARCH_RESULT_LIMIT} of ${countText} — uncheck "Limit" to see all`
+            : countText;
+    } else {
+        dom.searchResultCount.textContent = '';
+    }
+
     dom.searchResults.innerHTML = '';
 
     if (!words.length) {
@@ -284,7 +298,7 @@ function renderSearchResults(words, regex) {
     }
 
     const frag = document.createDocumentFragment();
-    for (const w of words) {
+    for (const w of display) {
         frag.appendChild(buildWordChip(w));
     }
     dom.searchResults.appendChild(frag);
@@ -298,8 +312,10 @@ function initSearchTab() {
     dom.searchMaxLen = document.getElementById('search-max-len');
     dom.searchShuffleBtn = document.getElementById('search-shuffle-btn');
     dom.searchClearBtn = document.getElementById('search-clear-btn');
+    dom.searchLimitToggle = document.getElementById('search-limit-toggle');
 
     dom.searchInput.addEventListener('input', debounce(runSearch, 150));
+    dom.searchLimitToggle.addEventListener('change', runSearch);
     dom.searchMinLen.addEventListener('input', debounce(runSearch, 150));
     dom.searchMaxLen.addEventListener('input', debounce(runSearch, 150));
 

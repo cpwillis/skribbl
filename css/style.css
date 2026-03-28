@@ -389,6 +389,17 @@ input[type="number"]:focus { border-color: var(--primary); }
   font-weight: 500;
 }
 
+.limit-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
 .word-count-badge {
   font-size: 0.8rem;
   background: var(--chip-bg);

@@ -421,8 +421,7 @@ function initSearchTab() {
     dom.searchMinLen = document.getElementById('search-min-len');
     dom.searchMaxLen = document.getElementById('search-max-len');
     dom.searchShuffleBtn = document.getElementById('search-shuffle-btn');
-    dom.searchBlanksClearBtn = document.getElementById('search-blanks-clear');
-    dom.searchCountClearBtn = document.getElementById('search-count-clear');
+    dom.searchClearBtn = document.getElementById('search-clear');
     function clearSearch() {
         dom.searchBlanks.value = '';
         dom.searchCount.value = '';
@@ -457,14 +456,9 @@ function initSearchTab() {
         }
     });
 
-    dom.searchBlanksClearBtn.addEventListener('click', () => {
+    dom.searchClearBtn.addEventListener('click', () => {
         clearSearch();
         dom.searchBlanks.focus();
-    });
-
-    dom.searchCountClearBtn.addEventListener('click', () => {
-        clearSearch();
-        dom.searchCount.focus();
     });
 
     dom.searchShuffleBtn.addEventListener('click', () => {

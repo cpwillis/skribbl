@@ -433,6 +433,19 @@ input[type="number"]:focus { border-color: var(--primary); }
 }
 .clear-btn:hover { color: var(--text); }
 
+.pattern-clear-col {
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.pattern-clear-col .clear-btn {
+  position: static;
+  transform: none;
+  padding: 0.45rem 0.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
 /* ===== Length Filter ===== */
 .len-filter {
   display: flex;
@@ -536,7 +549,12 @@ input[type="number"]:focus { border-color: var(--primary); }
   gap: 0;
   border-bottom: 2px solid var(--border);
   margin-bottom: 1.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.tool-tabs::-webkit-scrollbar { display: none; }
 
 .tab-btn {
   background: transparent;
@@ -551,6 +569,7 @@ input[type="number"]:focus { border-color: var(--primary); }
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  flex-shrink: 0;
   transition: color var(--transition), border-color var(--transition);
 }
 .tab-btn:hover { color: var(--text); background: transparent; }

@@ -6,16 +6,6 @@
   },
   {
     "group": "Default",
-    "name": "English 2",
-    "path": "word_lists/Default/English2.json"
-  },
-  {
-    "group": "Default",
-    "name": "English 3",
-    "path": "word_lists/Default/English3.json"
-  },
-  {
-    "group": "Default",
     "name": "French",
     "path": "word_lists/Default/French.json"
   },
@@ -34,7 +24,6 @@
     "name": "Spanish",
     "path": "word_lists/Default/Spanish.json"
   },
-
   {
     "group": "Animals",
     "name": "Animals",
@@ -65,7 +54,6 @@
     "name": "Mammals",
     "path": "word_lists/Categories/Animals/Mammals.json"
   },
-
   {
     "group": "Anime",
     "name": "Adventure",
@@ -86,7 +74,6 @@
     "name": "Slice of Life",
     "path": "word_lists/Categories/Anime/SliceOfLife.json"
   },
-
   {
     "group": "Brands",
     "name": "Automotive",
@@ -102,7 +89,6 @@
     "name": "Tech",
     "path": "word_lists/Categories/Brands/Tech.json"
   },
-
   {
     "group": "Countries",
     "name": "Africa",
@@ -128,7 +114,6 @@
     "name": "Oceania",
     "path": "word_lists/Categories/Countries/Oceania.json"
   },
-
   {
     "group": "Difficulties",
     "name": "Easy",
@@ -149,7 +134,6 @@
     "name": "Difficult",
     "path": "word_lists/Categories/Difficulties/Difficult.json"
   },
-
   {
     "group": "Dungeons & Dragons",
     "name": "Grab Bag",
@@ -170,7 +154,6 @@
     "name": "Spells",
     "path": "word_lists/Categories/Dungeons&Dragons/Spells.json"
   },
-
   {
     "group": "Famous People",
     "name": "Actors",
@@ -186,7 +169,6 @@
     "name": "YouTubers",
     "path": "word_lists/Categories/FamousPeople/YouTubers.json"
   },
-
   {
     "group": "Food & Drinks",
     "name": "Drinks",
@@ -202,7 +184,6 @@
     "name": "Vegetables",
     "path": "word_lists/Categories/Food&Drinks/Vegetables.json"
   },
-
   {
     "group": "Harry Potter",
     "name": "Characters",
@@ -218,7 +199,6 @@
     "name": "Spells",
     "path": "word_lists/Categories/HarryPotter/Spells.json"
   },
-
   {
     "group": "Miscellaneous",
     "name": "Meme",
@@ -234,7 +214,6 @@
     "name": "Random Items",
     "path": "word_lists/Categories/Miscellaneous/RandomItemsObjects.json"
   },
-
   {
     "group": "Movies & Shows",
     "name": "Action",
@@ -275,7 +254,6 @@
     "name": "TV Series",
     "path": "word_lists/Categories/Movies&Shows/TVSeries.json"
   },
-
   {
     "group": "Pokémon",
     "name": "Gen 1",
@@ -316,7 +294,6 @@
     "name": "Gen 8",
     "path": "word_lists/Categories/Pokemon/Gen8.json"
   },
-
   {
     "group": "Sports",
     "name": "Athletes",
@@ -327,7 +304,6 @@
     "name": "Sports",
     "path": "word_lists/Categories/Sports/Sports.json"
   },
-
   {
     "group": "Video Games",
     "name": "Fortnite",

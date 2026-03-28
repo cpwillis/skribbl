@@ -1,5 +1,5 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
   "name": "skribbl",
   "compatibility_date": "2025-09-27",
   "workers_dev": false,
@@ -11,5 +11,4 @@
     "directory": ".",
     "not_found_handling": "404-page",
   },
-  "compatibility_flags": ["nodejs_compat"],
 }

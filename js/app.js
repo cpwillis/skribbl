@@ -705,8 +705,151 @@ function initSharedControls() {
     });
 }
 
+// ── CUSTOM WORD LIST ──────────────────────────────────────
+const CUSTOM_KEY = 'skribbl_custom_words';
+const customState = { words: [] };
+
+function loadCustomWordsFromStorage() {
+    try {
+        const raw = localStorage.getItem(CUSTOM_KEY) || '';
+        return raw ? raw.split(',').map(s => s.trim()).filter(Boolean) : [];
+    } catch { return []; }
+}
+
+function saveCustomWordsToStorage(words) {
+    localStorage.setItem(CUSTOM_KEY, words.join(','));
+}
+
+function runCustomSearch() {
+    const pattern = dom.customSearchInput.value.trim();
+    const minLen = parseInt(dom.customSearchMinLen.value) || 0;
+    const maxLen = parseInt(dom.customSearchMaxLen.value) || 0;
+
+    let pool = applyLengthFilter(customState.words, minLen, maxLen);
+
+    if (!pattern) {
+        renderCustomResults(pool, null);
+        return;
+    }
+
+    let regex;
+    try { regex = patternToRegex(pattern); }
+    catch { renderCustomResults([], null); return; }
+
+    const matched = pool.filter(w => regex.test(w));
+    renderCustomResults(matched, regex);
+}
+
+function renderCustomResults(words, _regex) {
+    const limited = dom.customLimitToggle?.checked && words.length > SEARCH_RESULT_LIMIT;
+
+    if (words.length) {
+        const countText = `${words.length} match${words.length === 1 ? '' : 'es'}`;
+        dom.customResultCount.textContent = limited
+            ? `Showing ${SEARCH_RESULT_LIMIT} of ${countText} — uncheck "Limit" to see all`
+            : countText;
+    } else {
+        dom.customResultCount.textContent = '';
+    }
+
+    dom.customResults.innerHTML = '';
+
+    if (!words.length) {
+        const em = document.createElement('span');
+        em.className = 'empty-state';
+        em.textContent = customState.words.length
+            ? 'No matches found. Try a different pattern.'
+            : 'Paste words above and save to search.';
+        dom.customResults.appendChild(em);
+        return;
+    }
+
+    const display = limited ? words.slice(0, SEARCH_RESULT_LIMIT) : words;
+    const frag = document.createDocumentFragment();
+    for (const w of display) frag.appendChild(buildWordChip(w));
+    dom.customResults.appendChild(frag);
+}
+
+function updateCustomWordCount() {
+    const words = dom.customWordsInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    dom.customWordCountLabel.textContent = `${words.length} word${words.length === 1 ? '' : 's'}`;
+}
+
+function initCustomTab() {
+    dom.customWordsInput = document.getElementById('custom-words-input');
+    dom.customWordCountLabel = document.getElementById('custom-word-count');
+    dom.customWordsSave = document.getElementById('custom-words-save');
+    dom.customWordsClear = document.getElementById('custom-words-clear');
+    dom.customSearchInput = document.getElementById('custom-search-input');
+    dom.customSearchClear = document.getElementById('custom-search-clear');
+    dom.customSearchMinLen = document.getElementById('custom-search-min-len');
+    dom.customSearchMaxLen = document.getElementById('custom-search-max-len');
+    dom.customLimitToggle = document.getElementById('custom-search-limit-toggle');
+    dom.customResultCount = document.getElementById('custom-result-count');
+    dom.customResults = document.getElementById('custom-results');
+    dom.customShuffleBtn = document.getElementById('custom-shuffle-btn');
+
+    // Restore persisted words into textarea
+    customState.words = loadCustomWordsFromStorage();
+    if (customState.words.length) {
+        dom.customWordsInput.value = customState.words.join(', ');
+        updateCustomWordCount();
+    }
+
+    dom.customWordsInput.addEventListener('input', debounce(updateCustomWordCount, 150));
+
+    dom.customWordsSave.addEventListener('click', () => {
+        const words = dom.customWordsInput.value.split(',').map(s => s.trim()).filter(Boolean);
+        customState.words = words;
+        saveCustomWordsToStorage(words);
+        dom.customWordsInput.value = words.join(', ');
+        updateCustomWordCount();
+        runCustomSearch();
+        const orig = dom.customWordsSave.textContent;
+        dom.customWordsSave.textContent = '✓ Saved!';
+        setTimeout(() => { dom.customWordsSave.textContent = orig; }, 1500);
+    });
+
+    dom.customWordsClear.addEventListener('click', () => {
+        dom.customWordsInput.value = '';
+        customState.words = [];
+        saveCustomWordsToStorage([]);
+        updateCustomWordCount();
+        runCustomSearch();
+    });
+
+    dom.customSearchInput.addEventListener('input', debounce(runCustomSearch, 150));
+    dom.customLimitToggle.addEventListener('change', runCustomSearch);
+    dom.customSearchMinLen.addEventListener('input', debounce(runCustomSearch, 150));
+    dom.customSearchMaxLen.addEventListener('input', debounce(runCustomSearch, 150));
+
+    dom.customSearchClear.addEventListener('click', () => {
+        dom.customSearchInput.value = '';
+        dom.customSearchInput.focus();
+        runCustomSearch();
+    });
+
+    dom.customSearchInput.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            dom.customSearchInput.value = '';
+            runCustomSearch();
+        }
+    });
+
+    dom.customShuffleBtn.addEventListener('click', () => {
+        const chips = Array.from(dom.customResults.querySelectorAll('.word-chip'));
+        if (!chips.length) return;
+        const shuffled = fisher_yates_shuffle(chips);
+        dom.customResults.innerHTML = '';
+        const frag = document.createDocumentFragment();
+        shuffled.forEach(c => frag.appendChild(c));
+        dom.customResults.appendChild(frag);
+    });
+}
+
 // ── Tab switching ─────────────────────────────────────────
 function initTabs() {
+    const sectionRow = document.querySelector('.section-row');
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.tab-btn').forEach(b => {
@@ -717,6 +860,7 @@ function initTabs() {
             btn.setAttribute('aria-selected', 'true');
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+            sectionRow.classList.toggle('custom-tab-active', btn.dataset.tab === 'custom');
         });
     });
 }
@@ -735,6 +879,7 @@ async function init() {
     initSharedControls();
     initSearchTab();
     initBuilderTab();
+    initCustomTab();
     initTabs();
 
     // Check URL hash for shared state

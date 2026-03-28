@@ -208,6 +208,34 @@
             </svg>
             Word List Builder
           </button>
+          <button
+            class="tab-btn"
+            data-tab="custom"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tab-custom"
+            id="tab-btn-custom"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+              />
+              <path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+              />
+            </svg>
+            Custom Word List
+          </button>
         </div>
 
         <div class="section-row">
@@ -482,6 +510,143 @@
                 >
                 → Custom Words field when creating a private lobby.
               </p>
+            </div>
+
+            <!-- Custom Word List panel -->
+            <div
+              id="tab-custom"
+              class="tab-panel hidden"
+              role="tabpanel"
+              aria-labelledby="tab-btn-custom"
+            >
+              <p
+                style="
+                  font-size: 0.82rem;
+                  color: var(--text-muted);
+                  margin-bottom: 0.25rem;
+                "
+              >
+                Paste your own comma-separated word list below. It's saved
+                locally in your browser — nothing leaves your device.
+              </p>
+
+              <div class="custom-words-editor">
+                <textarea
+                  id="custom-words-input"
+                  class="custom-words-textarea"
+                  placeholder="apple, banana, cherry, …"
+                  rows="5"
+                  aria-label="Custom word list (comma-separated)"
+                  spellcheck="false"
+                  autocorrect="off"
+                ></textarea>
+                <div class="custom-words-actions">
+                  <span
+                    id="custom-word-count"
+                    class="custom-word-count"
+                    aria-live="polite"
+                    >0 words</span
+                  >
+                  <button id="custom-words-save" class="btn-success">
+                    💾 Save
+                  </button>
+                  <button id="custom-words-clear" class="btn-ghost">
+                    ✕ Clear
+                  </button>
+                </div>
+              </div>
+
+              <hr class="divider" />
+
+              <p
+                style="
+                  font-size: 0.82rem;
+                  color: var(--text-muted);
+                  margin-bottom: 0.25rem;
+                "
+              >
+                Enter the hint provided by skribbl.io — use <code>_</code> or
+                <code>?</code> for unknown letters, <code>*</code> for multiple
+                unknowns. Or enter letter counts like <code>3 4</code>.
+              </p>
+
+              <div class="pattern-row">
+                <div class="pattern-input-wrap">
+                  <input
+                    type="text"
+                    id="custom-search-input"
+                    placeholder="e.g. _oa__ or 3 4"
+                    autocomplete="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                    aria-label="Custom hint pattern input"
+                  />
+                  <button
+                    class="clear-btn"
+                    id="custom-search-clear"
+                    aria-label="Clear search input"
+                    title="Clear (Esc)"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              <div class="len-filter">
+                <label for="custom-search-min-len">Length filter:</label>
+                <input
+                  type="number"
+                  id="custom-search-min-len"
+                  min="1"
+                  max="30"
+                  placeholder="min"
+                  aria-label="Minimum word length"
+                />
+                <span>–</span>
+                <input
+                  type="number"
+                  id="custom-search-max-len"
+                  min="1"
+                  max="30"
+                  placeholder="max"
+                  aria-label="Maximum word length"
+                />
+                <label class="limit-toggle" style="margin-left: auto">
+                  <input
+                    type="checkbox"
+                    id="custom-search-limit-toggle"
+                    checked
+                  />
+                  Limit to 200
+                </label>
+              </div>
+
+              <div class="results-header">
+                <span
+                  class="results-count"
+                  id="custom-result-count"
+                  aria-live="polite"
+                ></span>
+                <button
+                  id="custom-shuffle-btn"
+                  class="btn-secondary"
+                  style="margin-left: auto"
+                >
+                  🔀 Shuffle results
+                </button>
+              </div>
+
+              <div
+                class="word-grid"
+                id="custom-results"
+                role="list"
+                aria-label="Custom search results"
+                aria-live="polite"
+              >
+                <span class="empty-state"
+                  >Paste words above and save to search.</span
+                >
+              </div>
             </div>
           </div>
         </div>

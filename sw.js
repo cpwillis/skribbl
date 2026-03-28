@@ -1,6 +1,15 @@
-const CACHE = 'skribbl-solver-v1';
+/**
+ * Service Worker — cache-first PWA shell.
+ *
+ * On install: caches all static assets plus every word list derived from
+ * /words/manifest.json. After the first visit the app is fully offline.
+ *
+ * To force clients to re-cache, bump the CACHE version string.
+ */
 
-const PRECACHE_URLS = [
+const CACHE = 'skribbl-solver-v2';
+
+const STATIC_URLS = [
     '/',
     '/index.html',
     '/privacy.html',
@@ -10,83 +19,19 @@ const PRECACHE_URLS = [
     '/manifest.webmanifest',
     '/404.html',
     '/words/manifest.json',
-    '/words/Categories/Animals/Animals.json',
-    '/words/Categories/Animals/Birds.json',
-    '/words/Categories/Animals/Bugs.json',
-    '/words/Categories/Animals/Dinosaurs.json',
-    '/words/Categories/Animals/Lizards.json',
-    '/words/Categories/Animals/Mammals.json',
-    '/words/Categories/Anime/Adventure.json',
-    '/words/Categories/Anime/Horror.json',
-    '/words/Categories/Anime/Romance.json',
-    '/words/Categories/Anime/SliceOfLife.json',
-    '/words/Categories/Brands/Automotive.json',
-    '/words/Categories/Brands/Fashion.json',
-    '/words/Categories/Brands/Tech.json',
-    '/words/Categories/Countries/Africa.json',
-    '/words/Categories/Countries/America.json',
-    '/words/Categories/Countries/Asia.json',
-    '/words/Categories/Countries/Europe.json',
-    '/words/Categories/Countries/Oceania.json',
-    '/words/Categories/Difficulties/Difficult.json',
-    '/words/Categories/Difficulties/Easy.json',
-    '/words/Categories/Difficulties/Hard.json',
-    '/words/Categories/Difficulties/Medium.json',
-    '/words/Categories/Dungeons&Dragons/GrabBag.json',
-    '/words/Categories/Dungeons&Dragons/Items.json',
-    '/words/Categories/Dungeons&Dragons/Monsters.json',
-    '/words/Categories/Dungeons&Dragons/Spells.json',
-    '/words/Categories/FamousPeople/Actors.json',
-    '/words/Categories/FamousPeople/Musicians.json',
-    '/words/Categories/FamousPeople/YouTubers.json',
-    '/words/Categories/Food&Drinks/Drinks.json',
-    '/words/Categories/Food&Drinks/Foods.json',
-    '/words/Categories/Food&Drinks/Vegetables.json',
-    '/words/Categories/HarryPotter/Characters.json',
-    '/words/Categories/HarryPotter/General.json',
-    '/words/Categories/HarryPotter/Spells.json',
-    '/words/Categories/Miscellaneous/Meme.json',
-    '/words/Categories/Miscellaneous/NSFW.json',
-    '/words/Categories/Miscellaneous/RandomItemsObjects.json',
-    '/words/Categories/Movies&Shows/Aciton.json',
-    '/words/Categories/Movies&Shows/Comedy.json',
-    '/words/Categories/Movies&Shows/Crime.json',
-    '/words/Categories/Movies&Shows/DCUniverse.json',
-    '/words/Categories/Movies&Shows/Horror.json',
-    '/words/Categories/Movies&Shows/Marvel.json',
-    '/words/Categories/Movies&Shows/Netflix.json',
-    '/words/Categories/Movies&Shows/TVSeries.json',
-    '/words/Categories/Pokemon/Gen1.json',
-    '/words/Categories/Pokemon/Gen2.json',
-    '/words/Categories/Pokemon/Gen3.json',
-    '/words/Categories/Pokemon/Gen4.json',
-    '/words/Categories/Pokemon/Gen5.json',
-    '/words/Categories/Pokemon/Gen6.json',
-    '/words/Categories/Pokemon/Gen7.json',
-    '/words/Categories/Pokemon/Gen8.json',
-    '/words/Categories/Sports/Athletes.json',
-    '/words/Categories/Sports/Sports.json',
-    '/words/Categories/VideoGames/Fortnite.json',
-    '/words/Categories/VideoGames/League of Legends.json',
-    '/words/Categories/VideoGames/LeagueOfLegends.json',
-    '/words/Categories/VideoGames/Minecraft.json',
-    '/words/Categories/VideoGames/MobileLegends.json',
-    '/words/Categories/VideoGames/Nintendo.json',
-    '/words/Categories/VideoGames/Overwatch Heroes.json',
-    '/words/Categories/VideoGames/Roblox.json',
-    '/words/Categories/VideoGames/SuperSmashBrosUltimate.json',
-    '/words/Default/English.json',
-    '/words/Default/English2.json',
-    '/words/Default/English3.json',
-    '/words/Default/French.json',
-    '/words/Default/German.json',
-    '/words/Default/Korean.json',
-    '/words/Default/Spanish.json',
 ];
 
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE).then(cache => cache.addAll(PRECACHE_URLS))
+        fetch('/words/manifest.json')
+            .then(r => r.json())
+            .then(entries => entries.map(e => '/' + e.path))
+            .then(wordUrls => caches.open(CACHE).then(cache => Promise.all([
+                // App shell must fully succeed — any failure here = broken app
+                cache.addAll(STATIC_URLS),
+                // Word lists cached individually so one bad file won't abort the install
+                ...wordUrls.map(url => cache.add(url).catch(() => { })),
+            ])))
             .then(() => self.skipWaiting())
     );
 });
@@ -107,12 +52,19 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request).then(cached => {
             if (cached) return cached;
-            return fetch(event.request).then(response => {
-                if (!response || response.status !== 200 || response.type !== 'basic') return response;
-                const clone = response.clone();
-                caches.open(CACHE).then(cache => cache.put(event.request, clone));
-                return response;
-            });
+            return fetch(event.request)
+                .then(response => {
+                    if (!response || response.status !== 200 || response.type !== 'basic') return response;
+                    const clone = response.clone();
+                    caches.open(CACHE).then(cache => cache.put(event.request, clone));
+                    return response;
+                })
+                .catch(() => {
+                    // Offline fallback: serve the app shell for any navigation request
+                    if (event.request.mode === 'navigate') {
+                        return caches.match('/index.html');
+                    }
+                });
         })
     );
 });

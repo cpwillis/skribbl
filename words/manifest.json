@@ -118,22 +118,22 @@
   {
     "group": "Dungeons & Dragons",
     "name": "Grab Bag",
-    "path": "words/Dungeons&Dragons/GrabBag.json"
+    "path": "words/DungeonsAndDragons/GrabBag.json"
   },
   {
     "group": "Dungeons & Dragons",
     "name": "Items",
-    "path": "words/Dungeons&Dragons/Items.json"
+    "path": "words/DungeonsAndDragons/Items.json"
   },
   {
     "group": "Dungeons & Dragons",
     "name": "Monsters",
-    "path": "words/Dungeons&Dragons/Monsters.json"
+    "path": "words/DungeonsAndDragons/Monsters.json"
   },
   {
     "group": "Dungeons & Dragons",
     "name": "Spells",
-    "path": "words/Dungeons&Dragons/Spells.json"
+    "path": "words/DungeonsAndDragons/Spells.json"
   },
   {
     "group": "Famous People",
@@ -153,17 +153,17 @@
   {
     "group": "Food & Drinks",
     "name": "Drinks",
-    "path": "words/Food&Drinks/Drinks.json"
+    "path": "words/FoodAndDrinks/Drinks.json"
   },
   {
     "group": "Food & Drinks",
     "name": "Foods",
-    "path": "words/Food&Drinks/Foods.json"
+    "path": "words/FoodAndDrinks/Foods.json"
   },
   {
     "group": "Food & Drinks",
     "name": "Vegetables",
-    "path": "words/Food&Drinks/Vegetables.json"
+    "path": "words/FoodAndDrinks/Vegetables.json"
   },
   {
     "group": "Harry Potter",
@@ -218,42 +218,42 @@
   {
     "group": "Movies & Shows",
     "name": "Action",
-    "path": "words/Movies&Shows/Aciton.json"
+    "path": "words/MoviesAndShows/Action.json"
   },
   {
     "group": "Movies & Shows",
     "name": "Comedy",
-    "path": "words/Movies&Shows/Comedy.json"
+    "path": "words/MoviesAndShows/Comedy.json"
   },
   {
     "group": "Movies & Shows",
     "name": "Crime",
-    "path": "words/Movies&Shows/Crime.json"
+    "path": "words/MoviesAndShows/Crime.json"
   },
   {
     "group": "Movies & Shows",
     "name": "DC Universe",
-    "path": "words/Movies&Shows/DCUniverse.json"
+    "path": "words/MoviesAndShows/DCUniverse.json"
   },
   {
     "group": "Movies & Shows",
     "name": "Horror",
-    "path": "words/Movies&Shows/Horror.json"
+    "path": "words/MoviesAndShows/Horror.json"
   },
   {
     "group": "Movies & Shows",
     "name": "Marvel",
-    "path": "words/Movies&Shows/Marvel.json"
+    "path": "words/MoviesAndShows/Marvel.json"
   },
   {
     "group": "Movies & Shows",
     "name": "Netflix",
-    "path": "words/Movies&Shows/Netflix.json"
+    "path": "words/MoviesAndShows/Netflix.json"
   },
   {
     "group": "Movies & Shows",
     "name": "TV Series",
-    "path": "words/Movies&Shows/TVSeries.json"
+    "path": "words/MoviesAndShows/TVSeries.json"
   },
   {
     "group": "Pokémon",
@@ -333,7 +333,7 @@
   {
     "group": "Video Games",
     "name": "Overwatch Heroes",
-    "path": "words/VideoGames/Overwatch Heroes.json"
+    "path": "words/VideoGames/OverwatchHeroes.json"
   },
   {
     "group": "Video Games",

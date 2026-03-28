@@ -251,9 +251,26 @@ function syncPickerCheckboxes(containerId, state) {
     });
 }
 
+// ── Selection cookie ─────────────────────────────────────
+function saveSelectionCookie() {
+    const value = encodeURIComponent(JSON.stringify([...appState.selectedPaths]));
+    const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `skribbl_selection=${value}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+function loadSelectionCookie() {
+    const match = document.cookie.split(';').map(s => s.trim()).find(s => s.startsWith('skribbl_selection='));
+    if (!match) return null;
+    try {
+        const parsed = JSON.parse(decodeURIComponent(match.slice('skribbl_selection='.length)));
+        return Array.isArray(parsed) ? parsed : null;
+    } catch { return null; }
+}
+
 // ── SHARED POOL REFRESH ──────────────────────────────────
 async function refreshPool() {
     appState.pool = await loadSelectedLists([...appState.selectedPaths]);
+    saveSelectionCookie();
     runSearch();
     applyBuilderPreset();
 }
@@ -662,6 +679,7 @@ function initSharedControls() {
         syncPickerCheckboxes('list-picker', appState);
         appState.pool = [];
         builderState.working = [];
+        saveSelectionCookie();
         runSearch();
         renderBuilderPreview();
     });
@@ -801,14 +819,26 @@ async function init() {
     initCustomTab();
     initTabs();
 
-    // Check URL hash for shared state
+    // Restore selection from cookie (before hash check so hash takes precedence)
+    const savedPaths = loadSelectionCookie();
+    if (savedPaths && savedPaths.length) {
+        const validPaths = new Set(manifest.map(e => e.path));
+        savedPaths.filter(p => validPaths.has(p)).forEach(p => appState.selectedPaths.add(p));
+        syncPickerCheckboxes('list-picker', appState);
+    }
+
+    // Check URL hash for shared state (overrides cookie)
     const hash = location.hash.slice(1);
     if (hash) {
         const shared = decodeShareState(hash);
         if (shared && applyShareState(shared)) {
             showSharedBanner();
             await refreshPool();
+        } else if (appState.selectedPaths.size) {
+            await refreshPool();
         }
+    } else if (appState.selectedPaths.size) {
+        await refreshPool();
     }
 }
 

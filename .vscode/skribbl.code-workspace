@@ -7,5 +7,6 @@
   ],
   "settings": {
     "liveServer.settings.root": "/public",
+    "djlint.showInstallError": false,
   },
 }

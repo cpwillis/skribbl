@@ -385,6 +385,7 @@ function setActivePreset(preset) {
     if (target) target.classList.add('active');
     activePreset = preset;
     dom.customCountWrap.classList.toggle('hidden', activePreset !== 'custom');
+    localStorage.setItem('skribbl_preset', preset);
 }
 
 function initSearchTab() {
@@ -461,6 +462,12 @@ function initBuilderTab() {
     dom.saveComboBtn = document.getElementById('save-combo-btn');
     dom.comboList = document.getElementById('combo-list');
 
+    // Restore persisted preset/custom count (share URL/combo will override after init)
+    const savedPreset = localStorage.getItem('skribbl_preset') || '50';
+    const savedCustomCount = localStorage.getItem('skribbl_custom_count');
+    if (savedCustomCount) dom.customCountInput.value = savedCustomCount;
+    setActivePreset(savedPreset);
+
     // Preset buttons
     document.querySelectorAll('.preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -468,10 +475,9 @@ function initBuilderTab() {
             applyBuilderPreset();
         });
     });
-    // default active
-    document.querySelector('.preset-btn[data-preset="50"]')?.classList.add('active');
 
     dom.customCountInput.addEventListener('input', debounce(() => {
+        localStorage.setItem('skribbl_custom_count', dom.customCountInput.value);
         if (activePreset === 'custom') applyBuilderPreset();
     }, 300));
 
@@ -484,6 +490,10 @@ function initBuilderTab() {
     dom.builderFilterClear.addEventListener('click', () => {
         dom.builderFilterInput.value = '';
         renderBuilderPreview();
+        dom.builderFilterInput.focus();
+    });
+    dom.builderFilterInput.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { dom.builderFilterInput.value = ''; renderBuilderPreview(); }
     });
 
     dom.shuffleBtn.addEventListener('click', () => {
@@ -784,21 +794,32 @@ function initCustomTab() {
 }
 
 // ── Tab switching ─────────────────────────────────────────
-function initTabs() {
+function activateTab(tabName) {
     const sectionRow = document.querySelector('.section-row');
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
-            });
-            btn.classList.add('active');
-            btn.setAttribute('aria-selected', 'true');
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
-            sectionRow.classList.toggle('custom-tab-active', btn.dataset.tab === 'custom');
-        });
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
     });
+    const btn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    if (btn) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+    }
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById(`tab-${tabName}`)?.classList.remove('hidden');
+    sectionRow.classList.toggle('custom-tab-active', tabName === 'custom');
+    localStorage.setItem('skribbl_tab', tabName);
+}
+
+function initTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+    });
+
+    const savedTab = localStorage.getItem('skribbl_tab');
+    if (savedTab && document.querySelector(`.tab-btn[data-tab="${savedTab}"]`)) {
+        activateTab(savedTab);
+    }
 }
 
 // ── Main init ─────────────────────────────────────────────

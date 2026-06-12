@@ -4,10 +4,12 @@
  * On install: caches all static assets plus every word list derived from
  * /words/manifest.json. After the first visit the app is fully offline.
  *
- * To force clients to re-cache, bump the CACHE version string.
+ * Cache versioning: deploy.sh stamps the git short SHA into CACHE on
+ * every deploy, which byte-changes this file and forces clients to
+ * reinstall and re-cache. No manual bump needed.
  */
 
-const CACHE = 'skribbl-solver-v4';
+const CACHE = 'skribbl-solver-xxxxxxx'; // placeholder: deploy.sh stamps the git short SHA here on deploy
 
 const STATIC_URLS = [
     '/',
@@ -40,6 +42,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keys =>
+            // Evict caches whose name != CACHE (prev deploys). Update trigger is the browser byte-diffing sw.js, not this.
             Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
         ).then(() => self.clients.claim())
     );

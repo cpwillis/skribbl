@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fa" />
+    <meta
+      name="theme-color"
+      content="#0e1015"
+      media="(prefers-color-scheme: dark)"
+    />
 
     <title>Skribbl Solver - Word List Builder &amp; Hint Search</title>
     <meta
@@ -84,11 +90,11 @@
     <link
       rel="icon"
       type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234361ee' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234361ee' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234f46e5' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234f46e5' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
     />
     <link
       rel="apple-touch-icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234361ee' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234361ee' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%234f46e5' stroke-width='2.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21' stroke='%234f46e5' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
     />
 
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -180,20 +186,6 @@
       </button>
     </div>
 
-    <div class="banner banner-disclaimer" role="note">
-      ⚠️ Not affiliated with
-      <a href="https://skribbl.io" target="_blank" rel="noopener noreferrer"
-        >skribbl.io</a
-      >
-      - this is a fan-made tool. Source:
-      <a
-        href="https://github.com/cpwillis/skribbl"
-        target="_blank"
-        rel="noopener noreferrer"
-        >github.com/cpwillis/skribbl</a
-      >
-    </div>
-
     <div
       id="shared-banner"
       class="banner banner-shared hidden"
@@ -212,7 +204,10 @@
 
     <!-- ═══ MAIN ══════════════════════════════════════════════ -->
     <main class="main" id="main">
-      <h1 class="visually-hidden">Skribbl Solver &ndash; Free Word List Builder &amp; Hint Search for skribbl.io</h1>
+      <h1 class="visually-hidden">
+        Skribbl Solver &ndash; Free Word List Builder &amp; Hint Search for
+        skribbl.io
+      </h1>
 
       <!-- ── COMBINED TOOL SECTION ────────────────────────── -->
       <section class="card">

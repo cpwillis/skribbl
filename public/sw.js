@@ -7,7 +7,7 @@
  * To force clients to re-cache, bump the CACHE version string.
  */
 
-const CACHE = 'skribbl-solver-v3';
+const CACHE = 'skribbl-solver-v4';
 
 const STATIC_URLS = [
     '/',

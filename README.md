@@ -4,85 +4,106 @@ A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 
 **Live site:** [skribbl.cpwillis.dev](https://skribbl.cpwillis.dev)
 
-> **Not affiliated with skribbl.io.** This is an independent community tool.
+> **Not affiliated with skribbl.io.** Independent community tool.
+>
+> **No support. No warranty. No guarantee of service.** This is a hobby project.
+> It may be changed, broken, or shut down permanently at any time without notice
+> and without liability. See [Terms of Use](public/terms.html) and
+> [Privacy & Storage](public/privacy.html).
 
 ---
 
 ## Features
 
-- **Hint Search** - Enter the blank hint from skribbl.io (e.g. `_oa__`) using `_`/`?` for single unknowns and `*` for multi-character wildcards. Or type word lengths (e.g. `4 3`) in the letter-count field - the two fields stay in sync. Results update live as you type.
-- **Word List Builder** - Select and combine any of the 70+ included word lists. Merged pools are case-insensitively deduplicated. Choose a word count (50, 100, All, or custom), shuffle, and copy the result as a comma-separated list for use in skribbl.io custom games.
-- **Custom Word List** - Paste your own comma-separated word list, save it to your browser, and run the same blank/pattern search against it.
-- **Multi-select & deduplication** - Combine multiple lists from different categories into a single deduplicated pool.
-- **Saved Combos** - Save named selections of word lists to your browser for quick recall.
-- **Share URL** - Encode your current list selection into a URL to share with others.
-- **Surprise Me** - Load a random word list at the click of a button.
+- **Hint Search** - Enter the blank hint from the game (e.g. `_oa__`) using `_`, `?` or `*` for unknown letters, or type word lengths (e.g. `4 3`) in the letter-count field. The two fields stay in sync and results update live as you type.
+- **Word List Builder** - Select and combine any of the included word lists. Merged pools are case-insensitively deduplicated. Choose a word count (50, 100, All, or custom), shuffle, and copy the result as a comma-separated list for a custom lobby.
+- **Custom Word List** - Paste your own comma-separated list, save it to your browser, and run the same search against it.
+- **Saved Combos** - Save named selections of word lists for quick recall.
+- **Share URL** - Encode your current selection into a URL.
+- **Surprise Me** - Load a random word list.
 - **Export** - Download your word set as a `.txt` file.
+- **Word length filter** - Filter by character count in every tab.
 - **Dark mode** - Persistent, respects your system preference.
-- **Word length filter** - Filter words by character count in all three tabs (Search, Builder, Custom).
-- **PWA** - Installable, works offline after first load.
-- **Mobile friendly** - Responsive layout for phones and tablets.
+- **PWA** - Installable, works fully offline after first load.
+- **Mobile friendly** - Responsive down to small phones.
 
 ---
 
-## Word Lists Included
+## Word lists
 
-| Category           | Lists                                                                                                                               |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Default            | English                                                                                                                             |
-| Animals            | Animals, Birds, Bugs, Dinosaurs, Lizards, Mammals                                                                                   |
-| Anime              | Adventure, Horror, Romance, Slice of Life                                                                                           |
-| Brands             | Automotive, Fashion, Tech                                                                                                           |
-| Countries          | Africa, America, Asia, Europe, Oceania                                                                                              |
-| Difficulties       | Easy, Medium, Hard, Difficult                                                                                                       |
-| Dungeons & Dragons | Grab Bag, Items, Monsters, Spells                                                                                                   |
-| Famous People      | Actors, Musicians, YouTubers                                                                                                        |
-| Food & Drinks      | Drinks, Foods, Vegetables                                                                                                           |
-| Harry Potter       | Characters, General, Spells                                                                                                         |
-| Languages          | French, German, Korean, Spanish                                                                                                     |
-| Miscellaneous      | Meme, NSFW, Random Items                                                                                                            |
-| Movies & Shows     | Action, Comedy, Crime, DC Universe, Horror, Marvel, Netflix, TV Series                                                              |
-| Pokémon            | Gen 1-8                                                                                                                             |
-| Sports             | Athletes, Sports                                                                                                                    |
-| Video Games        | Fortnite, League of Legends, League of Legends (2), Minecraft, Mobile Legends, Nintendo, Overwatch Heroes, Roblox, Super Smash Bros |
+26 lists, ~17,200 words.
+
+| Category      | Lists                                       |
+| ------------- | ------------------------------------------- |
+| Default       | English                                     |
+| Animals       | Animals, Birds, Bugs, Dinosaurs, Lizards, Mammals |
+| Countries     | Africa, America, Asia, Europe, Oceania      |
+| Difficulties  | Easy, Medium, Hard, Difficult               |
+| Food & Drinks | Drinks, Foods, Vegetables                   |
+| Languages     | French, German, Korean, Spanish             |
+| Miscellaneous | NSFW, Random Items                          |
+| Sports        | Sports                                      |
+
+Lists are plain JSON arrays under `public/words/`, indexed by
+`public/words/manifest.json`. Adding a list means dropping in a JSON array of
+strings and adding one manifest entry. No build step.
+
+Content is limited to ordinary vocabulary, place names, scientific names, and
+public-domain references. Lists of trademarked brands, copyrighted characters,
+franchise titles, and named living individuals are deliberately excluded and
+will not be accepted in pull requests. The NSFW list contains explicit language
+and is opt-in only.
 
 ---
 
-## Deployment (Cloudflare Pages)
+## Local development
 
-This is a zero-build static site. To deploy your own copy:
+```bash
+npx serve public
+```
 
-1. Fork this repository.
-2. Connect the fork to [Cloudflare Pages](https://pages.cloudflare.com/).
-3. Set **build command** to _(empty)_ and **output directory** to `/`.
-4. Optionally add a custom domain in the CF Pages dashboard.
+Any static file server works. There is no toolchain, no `npm install`, and no
+build step. `.claude/launch.json` wires the same command up for editor/agent
+previews.
 
-No `npm install`, no build step, no toolchain required.
+## Deployment
+
+Cloudflare Workers static assets, configured in `wrangler.jsonc`.
+
+```bash
+./deploy.sh
+```
+
+`deploy.sh` stamps the git short SHA into the service worker cache name and the
+page footer, deploys with `wrangler`, then restores the working tree. Every
+deploy therefore byte-changes `sw.js`, which forces clients to reinstall the
+service worker and re-cache. No manual version bump.
 
 ---
 
 ## Contributing
 
-Contributions are welcome via pull request. Please:
+Pull requests are welcome but **there is no commitment to review, respond to, or
+merge them**, and no timeframe. Bug reports go to
+[GitHub Issues](https://github.com/cpwillis/skribbl/issues) on the same basis.
 
-1. Fork the repository.
-2. Make your changes on a feature branch.
-3. Open a PR with a clear description of what was changed and why.
-4. Ensure your changes comply with the [licence](#licence) - credit to the original author and a link back to this repository must be preserved.
-
-Bug reports and feature requests are welcome via [GitHub Issues](https://github.com/cpwillis/skribbl/issues).
+1. Fork, branch, change.
+2. Open a PR describing what changed and why.
+3. Preserve the [licence](#licence) attribution requirements.
 
 ---
 
 ## Licence
 
-This project is licensed under a **Custom Attribution Licence**. See [LICENSE](LICENSE) for full terms.
+**Custom Attribution Licence.** See [LICENSE](LICENSE) for full terms.
 
-**Summary:** Free to use, fork, and modify. Derivative works must credit [cpwillis](https://github.com/cpwillis) and link back to this repository. No warranty provided.
+**Summary:** free to use, fork, and modify. Derivative works must credit
+[cpwillis](https://github.com/cpwillis) and link back to this repository. No
+support, no warranty, no liability.
 
 ---
 
 ## Credits
 
-- Word lists sourced from the community and the skribbl.io default word database.
-- Built by [cpwillis](https://github.com/cpwillis).
+Built by [cpwillis](https://github.com/cpwillis). Word lists are
+community-sourced everyday vocabulary.

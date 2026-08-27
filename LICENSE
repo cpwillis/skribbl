@@ -20,7 +20,14 @@ merge, publish, and distribute the Software, subject to the following conditions
    author a perpetual, irrevocable, royalty-free licence to use, modify,
    and redistribute your contribution as part of this project.
 
-3. NO WARRANTY
+3. NO SUPPORT AND NO OBLIGATION TO MAINTAIN
+   The author provides no support of any kind: no helpdesk, no service level,
+   no response time, and no commitment to fix defects, answer questions, review
+   pull requests, or continue development. The author may modify, abandon, or
+   permanently withdraw the Software and any deployment of it at any time,
+   without notice and without liability.
+
+4. NO WARRANTY
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
    FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL
@@ -28,6 +35,11 @@ merge, publish, and distribute the Software, subject to the following conditions
    IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-4. NO AFFILIATION
+5. NO AFFILIATION
    This software is not affiliated with, endorsed by, or connected to skribbl.io
-   or its operators. The name "skribbl.io" is the property of its respective owners.
+   or its operators. The name "skribbl.io" and any other third-party names or
+   marks referred to are the property of their respective owners and are used
+   descriptively only. Word lists distributed with the Software consist of
+   ordinary vocabulary, place names, scientific names, and public-domain
+   references; if you believe any of it infringes your rights, open an issue and
+   it will normally be removed.

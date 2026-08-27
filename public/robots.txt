@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /word_lists/
+Disallow:
 
 Sitemap: https://skribbl.cpwillis.dev/sitemap.xml

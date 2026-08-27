@@ -31,28 +31,46 @@ A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 
 ## Word lists
 
-26 lists, ~17,200 words.
+69 lists, ~23,100 words.
 
-| Category      | Lists                                       |
-| ------------- | ------------------------------------------- |
-| Default       | English                                     |
-| Animals       | Animals, Birds, Bugs, Dinosaurs, Lizards, Mammals |
-| Countries     | Africa, America, Asia, Europe, Oceania      |
-| Difficulties  | Easy, Medium, Hard, Difficult               |
-| Food & Drinks | Drinks, Foods, Vegetables                   |
-| Languages     | French, German, Korean, Spanish             |
-| Miscellaneous | NSFW, Random Items                          |
-| Sports        | Sports                                      |
+| Category           | Lists                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| Default            | English                                                                                              |
+| Animals            | Animals, Birds, Bugs, Dinosaurs, Lizards, Mammals                                                    |
+| Anime              | Adventure, Horror, Romance, Slice of Life                                                            |
+| Brands             | Automotive, Fashion, Tech                                                                            |
+| Countries          | Africa, America, Asia, Europe, Oceania                                                               |
+| Difficulties       | Easy, Medium, Hard, Difficult                                                                        |
+| Dungeons & Dragons | Grab Bag, Items, Monsters, Spells                                                                    |
+| Famous People      | Actors, Musicians, YouTubers                                                                         |
+| Food & Drinks      | Drinks, Foods, Vegetables                                                                            |
+| Harry Potter       | Characters, General, Spells                                                                          |
+| Languages          | French, German, Korean, Spanish                                                                      |
+| Miscellaneous      | Meme, NSFW, Random Items                                                                             |
+| Movies & Shows     | Action, Comedy, Crime, DC Universe, Horror, Marvel, Netflix, TV Series                               |
+| Pokémon            | Gen 1-8                                                                                              |
+| Sports             | Athletes, Sports                                                                                     |
+| Video Games        | Fortnite, League of Legends, Minecraft, Mobile Legends, Nintendo, Overwatch, Roblox, Super Smash Bros |
 
 Lists are plain JSON arrays under `public/words/`, indexed by
 `public/words/manifest.json`. Adding a list means dropping in a JSON array of
 strings and adding one manifest entry. No build step.
 
-Content is limited to ordinary vocabulary, place names, scientific names, and
-public-domain references. Lists of trademarked brands, copyrighted characters,
-franchise titles, and named living individuals are deliberately excluded and
-will not be accepted in pull requests. The NSFW list contains explicit language
-and is opt-in only.
+### Third-party names
+
+Themed lists contain names and titles that belong to other people: brands,
+characters, franchises, films, games, and real individuals. They are included
+only as single-word drawing prompts.
+
+**No ownership is claimed over any of them.** All rights stay with their
+respective owners and original creators. This project is not affiliated with,
+endorsed by, or sponsored by any of them, and no individual named in any list is
+associated with it. The lists reproduce no artwork, logos, characters, text, or
+other creative work: names and titles only. Full attributions are in the
+[Terms of Use](public/terms.html#attributions). If you own rights in something
+here and want it gone, open an issue and it will normally be removed.
+
+The NSFW list contains explicit language and is opt-in only.
 
 ---
 

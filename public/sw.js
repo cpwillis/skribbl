@@ -18,7 +18,6 @@ const STATIC_URLS = [
     '/terms.html',
     '/css/style.css',
     '/js/app.js',
-    '/js/local_development.js',
     '/js/search-panel.js',
     '/js/darkmode.js',
     '/js/pwa.js',

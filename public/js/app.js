@@ -36,37 +36,17 @@ const appState = {
 
 const builderState = {
     working: [],       // sliced + possibly shuffled
-    shuffled: false,
 };
 
 // ── DOM refs (populated in init) ──────────────────────────
 const dom = {};
 
 // ── Utilities ─────────────────────────────────────────────
-function parseWordList(rawText) {
-    const trimmed = rawText.trim();
-    if (!trimmed) return [];
-    try {
-        const obj = JSON.parse(trimmed);
-        if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
-            return Object.values(obj)
-                .map(v => (typeof v === 'object' && v.word ? String(v.word).trim() : String(v).trim()))
-                .filter(Boolean);
-        }
-        if (Array.isArray(obj)) return obj.map(String).map(s => s.trim()).filter(Boolean);
-        return [];
-    } catch {
-        // Format C: comma/newline delimited text
-        return trimmed.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
-    }
-}
-
 async function fetchAndParse(path) {
-    if (!(LOCAL_DEVELOPMENT && local_mode) && listCache.has(path)) return listCache.get(path);
+    if (listCache.has(path)) return listCache.get(path);
     const res = await fetch(path);
     if (!res.ok) throw new Error(`Failed to fetch ${path}`);
-    const text = await res.text();
-    const words = parseWordList(text);
+    const words = (await res.json()).map(w => String(w).trim()).filter(Boolean);
     listCache.set(path, words);
     return words;
 }
@@ -106,22 +86,6 @@ function escapeRegex(s) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function patternToRegex(raw) {
-    // If it's "3 4" style (space-separated numbers), do length matching
-    if (/^\s*\d+(\s+\d+)*\s*$/.test(raw)) {
-        const lens = raw.trim().split(/\s+/).map(Number);
-        const parts = lens.map(n => `.{${n}}`);
-        return new RegExp(`^${parts.join(' ')}$`, 'i');
-    }
-    // Wildcard pattern: _ or ? = single char, * = any chars
-    const escaped = raw.split('').map(ch => {
-        if (ch === '_' || ch === '?') return '(.)';
-        if (ch === '*') return '(.*)';
-        return escapeRegex(ch);
-    }).join('');
-    return new RegExp(`^${escaped}$`, 'i');
-}
-
 // Blanks-field regex: * _ ? = single unknown char; spaces are literal word separators
 function blanksToRegex(raw) {
     const escaped = raw.split('').map(ch => {
@@ -145,19 +109,41 @@ function countToBlanks(count) {
     return trimmed.split(/\s+/).map(n => '*'.repeat(parseInt(n, 10))).join(' ');
 }
 
-function buildWordChip(word) {
+// Positions the pattern pinned down, so the chip can <mark> them. Same length only:
+// a '*' in the blanks field is one unknown character, so pattern and word line up 1:1.
+function knownMask(word, pattern) {
+    if (!pattern || pattern.length !== word.length) return null;
+    const mask = [...pattern].map(ch => ch !== '*' && ch !== '_' && ch !== '?' && ch !== ' ');
+    return mask.some(Boolean) ? mask : null;
+}
+
+function buildWordChip(word, pattern) {
     const chip = document.createElement('span');
     chip.className = 'word-chip';
-    chip.appendChild(document.createTextNode(word));
+    const mask = knownMask(word, pattern);
+    if (mask) {
+        // Walk runs of same-state characters so adjacent hits share one <mark>
+        for (let i = 0; i < word.length;) {
+            let j = i;
+            while (j < word.length && mask[j] === mask[i]) j++;
+            const run = word.slice(i, j);
+            if (mask[i]) {
+                const m = document.createElement('mark');
+                m.textContent = run;
+                chip.appendChild(m);
+            } else {
+                chip.appendChild(document.createTextNode(run));
+            }
+            i = j;
+        }
+    } else {
+        chip.appendChild(document.createTextNode(word));
+    }
     const len = document.createElement('span');
     len.className = 'chip-len';
     len.textContent = word.replace(/ /g, '').length;
     chip.appendChild(len);
     return chip;
-}
-
-function escapeHtml(str) {
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function flashCopied(el) {
@@ -193,7 +179,9 @@ function buildListPicker(containerId, state, onChangeCallback) {
         // Group header
         const header = document.createElement('div');
         header.className = 'picker-group-header';
-        header.innerHTML = `<span>${escapeHtml(group)}</span>`;
+        const groupLabel = document.createElement('span');
+        groupLabel.textContent = group;
+        header.appendChild(groupLabel);
 
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'group-toggle-all';
@@ -251,18 +239,16 @@ function syncPickerCheckboxes(containerId, state) {
     });
 }
 
-// ── Selection cookie ─────────────────────────────────────
-function saveSelectionCookie() {
-    const value = encodeURIComponent(JSON.stringify([...appState.selectedPaths]));
-    const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
-    document.cookie = `skribbl_selection=${value}; expires=${expires}; path=/; SameSite=Lax`;
+// ── Selection persistence ────────────────────────────────
+const SELECTION_KEY = 'skribbl_selection';
+
+function saveSelection() {
+    localStorage.setItem(SELECTION_KEY, JSON.stringify([...appState.selectedPaths]));
 }
 
-function loadSelectionCookie() {
-    const match = document.cookie.split(';').map(s => s.trim()).find(s => s.startsWith('skribbl_selection='));
-    if (!match) return null;
+function loadSelection() {
     try {
-        const parsed = JSON.parse(decodeURIComponent(match.slice('skribbl_selection='.length)));
+        const parsed = JSON.parse(localStorage.getItem(SELECTION_KEY) || 'null');
         return Array.isArray(parsed) ? parsed : null;
     } catch { return null; }
 }
@@ -270,7 +256,7 @@ function loadSelectionCookie() {
 // ── SHARED POOL REFRESH ──────────────────────────────────
 async function refreshPool() {
     appState.pool = await loadSelectedLists([...appState.selectedPaths]);
-    saveSelectionCookie();
+    saveSelection();
     runSearch();
     applyBuilderPreset();
 }
@@ -282,12 +268,13 @@ function runSearch() {
         ? 'No matches found. Try a different pattern.'
         : 'Select one or more word lists to search.';
     runPatternFilter(appState.pool, dom.searchBlanks, dom.searchMinLen, dom.searchMaxLen, blanksToRegex,
-        words => renderResults(words, searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches', emptyMsg));
+        (words, pattern) => renderResults(words, searchPage, dom.searchResults, dom.searchResultCount, 'match', 'matches', emptyMsg, pattern));
 }
 
-function renderResults(words, pageState, resultsEl, countEl, singular, plural, emptyMsg) {
+function renderResults(words, pageState, resultsEl, countEl, singular, plural, emptyMsg, pattern) {
     resultsEl.innerHTML = '';
     countEl.textContent = '';
+    pageState.pattern = pattern || '';
     if (!words.length) {
         pageState.words = [];
         pageState.rendered = 0;
@@ -306,7 +293,7 @@ function appendPage(state, resultsEl, countEl, singular, plural) {
     const { words, rendered } = state;
     const next = words.slice(rendered, rendered + SEARCH_PAGE_SIZE);
     const frag = document.createDocumentFragment();
-    for (const w of next) frag.appendChild(buildWordChip(w));
+    for (const w of next) frag.appendChild(buildWordChip(w, state.pattern));
     resultsEl.appendChild(frag);
     state.rendered += next.length;
 
@@ -327,10 +314,10 @@ function runPatternFilter(pool, patternEl, minLenEl, maxLenEl, toRegexFn, onResu
     const minLen = parseInt(minLenEl.value) || 0;
     const maxLen = parseInt(maxLenEl.value) || 0;
     const filtered = applyLengthFilter(pool, minLen, maxLen);
-    if (!pattern) { onResults(filtered); return; }
+    if (!pattern) { onResults(filtered, ''); return; }
     let regex;
-    try { regex = toRegexFn(pattern); } catch { onResults([]); return; }
-    onResults(filtered.filter(w => regex.test(w)));
+    try { regex = toRegexFn(pattern); } catch { onResults([], ''); return; }
+    onResults(filtered.filter(w => regex.test(w)), pattern);
 }
 
 function shuffleResultChips(resultsEl) {
@@ -430,7 +417,6 @@ function applyBuilderPreset() {
     } else {
         builderState.working = pool.slice(0, parseInt(activePreset));
     }
-    builderState.shuffled = false;
     renderBuilderPreview();
 }
 
@@ -498,7 +484,6 @@ function initBuilderTab() {
 
     dom.shuffleBtn.addEventListener('click', () => {
         builderState.working = fisher_yates_shuffle(builderState.working);
-        builderState.shuffled = true;
         renderBuilderPreview();
     });
 
@@ -552,7 +537,7 @@ function renderComboList() {
     const combos = loadCombos();
     dom.comboList.innerHTML = '';
     if (!combos.length) {
-        dom.comboList.innerHTML = '<span class="empty-state" style="font-size:0.8rem">No saved combos yet.</span>';
+        dom.comboList.innerHTML = '<span class="empty-state empty-state-sm">No saved combos yet.</span>';
         return;
     }
     combos.forEach((combo, idx) => {
@@ -626,28 +611,6 @@ function applyShareState(state) {
     return true;
 }
 
-// ── Dark mode ─────────────────────────────────────────────
-function initDarkMode() {
-    const stored = localStorage.getItem('skribbl_theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = stored || (prefersDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-
-    const btn = document.getElementById('dark-mode-toggle');
-    if (!btn) return;
-    btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-    btn.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
-
-    btn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('skribbl_theme', next);
-        btn.textContent = next === 'dark' ? '☀️' : '🌙';
-        btn.title = next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
-    });
-}
-
 // ── Storage Notice Banner ─────────────────────────────────
 function initStorageBanner() {
     const dismissed = localStorage.getItem('skribbl_banner_dismissed');
@@ -689,7 +652,7 @@ function initSharedControls() {
         syncPickerCheckboxes('list-picker', appState);
         appState.pool = [];
         builderState.working = [];
-        saveSelectionCookie();
+        saveSelection();
         runSearch();
         renderBuilderPreview();
     });
@@ -726,7 +689,7 @@ function runCustomSearch() {
         ? 'No matches found. Try a different pattern.'
         : 'Paste words above and save to search.';
     runPatternFilter(customState.words, dom.customBlanks, dom.customSearchMinLen, dom.customSearchMaxLen, blanksToRegex,
-        words => renderResults(words, customPage, dom.customResults, dom.customResultCount, 'match', 'matches', emptyMsg));
+        (words, pattern) => renderResults(words, customPage, dom.customResults, dom.customResultCount, 'match', 'matches', emptyMsg, pattern));
 }
 
 function updateCustomWordCount() {
@@ -824,9 +787,7 @@ function initTabs() {
 
 // ── Main init ─────────────────────────────────────────────
 async function init() {
-    initDarkMode();
     initStorageBanner();
-    initLocalDevTools();
 
     // Fetch manifest
     const res = await fetch('words/manifest.json');
@@ -840,13 +801,17 @@ async function init() {
     initCustomTab();
     initTabs();
 
-    // Restore selection from cookie (before hash check so hash takes precedence)
-    const savedPaths = loadSelectionCookie();
-    if (savedPaths && savedPaths.length) {
+    // Restore the saved selection (before the hash check, so a share URL wins).
+    // No saved selection at all = first visit: preselect the default list so the
+    // search panel is usable immediately.
+    const savedPaths = loadSelection();
+    if (savedPaths) {
         const validPaths = new Set(manifest.map(e => e.path));
         savedPaths.filter(p => validPaths.has(p)).forEach(p => appState.selectedPaths.add(p));
-        syncPickerCheckboxes('list-picker', appState);
+    } else if (manifest.length) {
+        appState.selectedPaths.add((manifest.find(e => e.group === 'Default') || manifest[0]).path);
     }
+    syncPickerCheckboxes('list-picker', appState);
 
     // Check URL hash for shared state (overrides cookie)
     const hash = location.hash.slice(1);

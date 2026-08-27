@@ -15,7 +15,7 @@ A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 
 ## Features
 
-- **Hint Search** - Enter the blank hint from the game (e.g. `_oa__`) using `_`, `?` or `*` for unknown letters, or type word lengths (e.g. `4 3`) in the letter-count field. The two fields stay in sync and results update live as you type.
+- **Hint Search** - Enter the blank hint from the game (e.g. `_oa__`) using `_`, `?` or `*` for unknown letters, or type word lengths (e.g. `4 3`) in the letter-count field. The two fields stay in sync, results update live as you type, and the letters you already know are highlighted in each match.
 - **Word List Builder** - Select and combine any of the included word lists. Merged pools are case-insensitively deduplicated. Choose a word count (50, 100, All, or custom), shuffle, and copy the result as a comma-separated list for a custom lobby.
 - **Custom Word List** - Paste your own comma-separated list, save it to your browser, and run the same search against it.
 - **Saved Combos** - Save named selections of word lists for quick recall.

@@ -254,9 +254,20 @@ function loadSelection() {
 }
 
 // ── SHARED POOL REFRESH ──────────────────────────────────
+function renderPickerSummary() {
+    const el = document.getElementById('picker-summary');
+    if (!el) return;
+    const n = appState.selectedPaths.size;
+    el.textContent = n
+        ? `${n} list${n === 1 ? '' : 's'} · ${appState.pool.length.toLocaleString()} words`
+        : 'No lists selected';
+    el.classList.toggle('is-empty', !n);
+}
+
 async function refreshPool() {
     appState.pool = await loadSelectedLists([...appState.selectedPaths]);
     saveSelection();
+    renderPickerSummary();
     runSearch();
     applyBuilderPreset();
 }
@@ -611,19 +622,6 @@ function applyShareState(state) {
     return true;
 }
 
-// ── Storage Notice Banner ─────────────────────────────────
-function initStorageBanner() {
-    const dismissed = localStorage.getItem('skribbl_banner_dismissed');
-    const banner = document.getElementById('storage-banner');
-    if (!banner) return;
-    if (dismissed) { banner.classList.add('hidden'); return; }
-
-    document.getElementById('storage-banner-close')?.addEventListener('click', () => {
-        banner.classList.add('hidden');
-        localStorage.setItem('skribbl_banner_dismissed', '1');
-    });
-}
-
 // ── Shared notice banner ──────────────────────────────────
 function showSharedBanner() {
     const banner = document.getElementById('shared-banner');
@@ -653,6 +651,7 @@ function initSharedControls() {
         appState.pool = [];
         builderState.working = [];
         saveSelection();
+        renderPickerSummary();
         runSearch();
         renderBuilderPreview();
     });
@@ -787,7 +786,6 @@ function initTabs() {
 
 // ── Main init ─────────────────────────────────────────────
 async function init() {
-    initStorageBanner();
 
     // Fetch manifest
     const res = await fetch('words/manifest.json');
@@ -825,6 +823,8 @@ async function init() {
         }
     } else if (appState.selectedPaths.size) {
         await refreshPool();
+    } else {
+        renderPickerSummary();
     }
 }
 

@@ -64,7 +64,14 @@ npx serve public
 
 Any static file server works. There is no toolchain, no `npm install`, and no
 build step. `.claude/launch.json` wires the same command up for editor/agent
-previews.
+previews. The service worker does not register on localhost, so edits show up on
+a plain reload.
+
+There is one self-check covering the hint-pattern logic:
+
+```bash
+node test.mjs
+```
 
 ## Deployment
 

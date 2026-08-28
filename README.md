@@ -114,17 +114,31 @@ merge them**, and no timeframe. Bug reports go to
 
 1. Fork, branch, change.
 2. Open a PR describing what changed and why.
-3. Preserve the [licence](#licence) attribution requirements.
+3. Keep the copyright and licence notices intact.
+
+By opening a pull request you agree your contribution is licensed under the
+same [MIT licence](LICENSE) as the rest of the project.
 
 ---
 
 ## Licence
 
-**Custom Attribution Licence.** See [LICENSE](LICENSE) for full terms.
+[MIT](LICENSE). Copyright (c) 2026 [cpwillis](https://github.com/cpwillis).
 
-**Summary:** free to use, fork, and modify. Derivative works must credit
-[cpwillis](https://github.com/cpwillis) and link back to this repository. No
-support, no warranty, no liability.
+Free to use, fork, modify, and redistribute, commercially or otherwise. The one
+condition is the one that matters here: **the copyright notice and the licence
+text must be kept in all copies or substantial portions of the software.** Strip
+the attribution and you are outside the licence.
+
+MIT requires that notice to travel with the code. It does not require credit to
+be shown to end users, so if you deploy a fork publicly, a visible line crediting
+[cpwillis](https://github.com/cpwillis) and linking back to
+[this repository](https://github.com/cpwillis/skribbl) is asked for as a
+courtesy, not demanded as a condition.
+
+The licence covers this software. It does not cover the third-party names the
+word lists refer to (see above), and it carries no warranty, no liability, and
+no obligation to support or maintain anything.
 
 ---
 

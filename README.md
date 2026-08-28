@@ -2,14 +2,14 @@
 
 A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 
-**Live site:** [skribbl.cpwillis.dev](https://skribbl.cpwillis.dev)
-
-> **Not affiliated with skribbl.io.** Independent community tool.
->
+> [!WARNING]
 > **No support. No warranty. No guarantee of service.** This is a hobby project.
 > It may be changed, broken, or shut down permanently at any time without notice
-> and without liability. See [Terms of Use](public/terms.html) and
-> [Privacy & Storage](public/privacy.html).
+> and without liability. See the
+> [Terms of Use](https://skribbl.cpwillis.dev/terms.html) and
+> [Privacy & Storage](https://skribbl.cpwillis.dev/privacy.html).
+>
+> **Not affiliated with skribbl.io.** Independent community tool.
 
 ---
 
@@ -31,46 +31,21 @@ A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
 
 ## Word lists
 
-69 lists, ~23,100 words.
+69 lists, ~23,100 words, across Animals, Anime, Brands, Countries, Difficulties,
+Dungeons & Dragons, Famous People, Food & Drinks, Harry Potter, Languages,
+Miscellaneous, Movies & Shows, Pokémon, Sports and Video Games. The picker on
+the [live site](https://skribbl.cpwillis.dev) browses all of them.
 
-| Category           | Lists                                                                                                |
-| ------------------ | ---------------------------------------------------------------------------------------------------- |
-| Default            | English                                                                                              |
-| Animals            | Animals, Birds, Bugs, Dinosaurs, Lizards, Mammals                                                    |
-| Anime              | Adventure, Horror, Romance, Slice of Life                                                            |
-| Brands             | Automotive, Fashion, Tech                                                                            |
-| Countries          | Africa, America, Asia, Europe, Oceania                                                               |
-| Difficulties       | Easy, Medium, Hard, Difficult                                                                        |
-| Dungeons & Dragons | Grab Bag, Items, Monsters, Spells                                                                    |
-| Famous People      | Actors, Musicians, YouTubers                                                                         |
-| Food & Drinks      | Drinks, Foods, Vegetables                                                                            |
-| Harry Potter       | Characters, General, Spells                                                                          |
-| Languages          | French, German, Korean, Spanish                                                                      |
-| Miscellaneous      | Meme, NSFW, Random Items                                                                             |
-| Movies & Shows     | Action, Comedy, Crime, DC Universe, Horror, Marvel, Netflix, TV Series                               |
-| Pokémon            | Gen 1-8                                                                                              |
-| Sports             | Athletes, Sports                                                                                     |
-| Video Games        | Fortnite, League of Legends, Minecraft, Mobile Legends, Nintendo, Overwatch, Roblox, Super Smash Bros |
+Each list is a plain JSON array under `public/words/`, indexed by
+[`manifest.json`](public/words/manifest.json), which is the source of truth for
+what ships.
 
-Lists are plain JSON arrays under `public/words/`, indexed by
-`public/words/manifest.json`. Adding a list means dropping in a JSON array of
-strings and adding one manifest entry. No build step.
-
-### Third-party names
-
-Themed lists contain names and titles that belong to other people: brands,
-characters, franchises, films, games, and real individuals. They are included
-only as single-word drawing prompts.
-
-**No ownership is claimed over any of them.** All rights stay with their
-respective owners and original creators. This project is not affiliated with,
-endorsed by, or sponsored by any of them, and no individual named in any list is
-associated with it. The lists reproduce no artwork, logos, characters, text, or
-other creative work: names and titles only. Full attributions are in the
-[Terms of Use](public/terms.html#attributions). If you own rights in something
-here and want it gone, open an issue and it will normally be removed.
-
-The NSFW list contains explicit language and is opt-in only.
+Themed lists contain names that belong to other people. **No ownership is
+claimed over any of them**, and nothing here is affiliated with or endorsed by
+them: they are single-word drawing prompts, and no artwork, logo, character, or
+text is reproduced. Full attributions and the takedown route are in the
+[Terms of Use](https://skribbl.cpwillis.dev/terms.html#attributions). The NSFW
+list contains explicit language and is opt-in only.
 
 ---
 
@@ -80,12 +55,12 @@ The NSFW list contains explicit language and is opt-in only.
 npx serve public
 ```
 
-Any static file server works. There is no toolchain, no `npm install`, and no
-build step. `.claude/launch.json` wires the same command up for editor/agent
-previews. The service worker does not register on localhost, so edits show up on
-a plain reload.
+Any static file server works. No toolchain, no `npm install`, no build step.
+`.claude/launch.json` wires the same command up for editor and agent previews.
+The service worker does not register on localhost, so edits show up on a plain
+reload.
 
-There is one self-check covering the hint-pattern logic:
+One self-check covers the hint-pattern logic:
 
 ```bash
 node test.mjs
@@ -93,56 +68,12 @@ node test.mjs
 
 ## Deployment
 
-Cloudflare Workers static assets, configured in `wrangler.jsonc`.
+Cloudflare Workers static assets, configured in
+[`wrangler.jsonc`](wrangler.jsonc).
 
 ```bash
 ./deploy.sh
 ```
 
-`deploy.sh` stamps the git short SHA into the service worker cache name and the
-page footer, deploys with `wrangler`, then restores the working tree. Every
-deploy therefore byte-changes `sw.js`, which forces clients to reinstall the
-service worker and re-cache. No manual version bump.
-
----
-
-## Contributing
-
-Pull requests are welcome but **there is no commitment to review, respond to, or
-merge them**, and no timeframe. Bug reports go to
-[GitHub Issues](https://github.com/cpwillis/skribbl/issues) on the same basis.
-
-1. Fork, branch, change.
-2. Open a PR describing what changed and why.
-3. Keep the copyright and licence notices intact.
-
-By opening a pull request you agree your contribution is licensed under the
-same [MIT licence](LICENSE) as the rest of the project.
-
----
-
-## Licence
-
-[MIT](LICENSE). Copyright (c) 2026 [cpwillis](https://github.com/cpwillis).
-
-Free to use, fork, modify, and redistribute, commercially or otherwise. The one
-condition is the one that matters here: **the copyright notice and the licence
-text must be kept in all copies or substantial portions of the software.** Strip
-the attribution and you are outside the licence.
-
-MIT requires that notice to travel with the code. It does not require credit to
-be shown to end users, so if you deploy a fork publicly, a visible line crediting
-[cpwillis](https://github.com/cpwillis) and linking back to
-[this repository](https://github.com/cpwillis/skribbl) is asked for as a
-courtesy, not demanded as a condition.
-
-The licence covers this software. It does not cover the third-party names the
-word lists refer to (see above), and it carries no warranty, no liability, and
-no obligation to support or maintain anything.
-
----
-
-## Credits
-
-Built by [cpwillis](https://github.com/cpwillis). Word lists are
-community-sourced everyday vocabulary.
+It stamps the build SHA and freshness dates, deploys, then restores the working
+tree. The header comment in [`deploy.sh`](deploy.sh) explains the mechanics.

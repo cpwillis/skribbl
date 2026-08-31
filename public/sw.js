@@ -11,18 +11,22 @@
 
 const CACHE = 'skribbl-solver-xxxxxxx'; // placeholder: deploy.sh stamps the git short SHA here on deploy
 
+// Extensionless, and no '/index.html': the asset router 307s every .html form, and cache.addAll
+// follows the redirect and stores the result with redirected:true. A navigation cannot render such
+// a response, so precaching the .html URLs made /terms.html and /privacy.html a browser error page
+// for every returning visitor.
 const STATIC_URLS = [
     '/',
-    '/index.html',
-    '/privacy.html',
-    '/terms.html',
+    '/attributions',
+    '/privacy',
+    '/terms',
     '/css/style.css',
     '/js/app.js',
     '/js/search-panel.js',
     '/js/darkmode.js',
     '/js/pwa.js',
     '/manifest.webmanifest',
-    '/404.html',
+    '/404',
     '/words/manifest.json',
 ];
 
@@ -68,7 +72,7 @@ self.addEventListener('fetch', event => {
                 .catch(() => {
                     // Offline fallback: serve the app shell for any navigation request
                     if (event.request.mode === 'navigate') {
-                        return caches.match('/index.html');
+                        return caches.match('/');
                     }
                 });
         })

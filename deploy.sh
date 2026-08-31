@@ -60,4 +60,4 @@ grep -q "\"dateModified\": \"${index_date}\"" public/index.html || { echo "Faile
 grep -q "<lastmod>${index_date}</lastmod>" public/sitemap.xml || { echo "Failed to stamp lastmod into public/sitemap.xml" >&2; exit 1; }
 
 echo "Deploying with cache version: skribbl-solver-${version}"
-npx wrangler deploy
+npx wrangler@4 deploy

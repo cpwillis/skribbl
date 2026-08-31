@@ -36,11 +36,12 @@ grep -q ">${version}</span>" public/index.html || { echo "Failed to stamp build 
 # <lastmod> that always reads "today", and a deploy that didn't touch privacy.html didn't change it.
 site="https://skribbl.cpwillis.dev"
 lastmod_map=""
-for page in index terms privacy; do
+for page in index attributions; do
   file="public/${page}.html"
   commit_date=$(git log -1 --format=%cs -- "$file")
   [ -n "$commit_date" ] || continue
-  [ "$page" = index ] && url="${site}/" || url="${site}/${page}.html"
+  # extensionless: the sitemap must list the URL that actually serves, not one that 307s
+  [ "$page" = index ] && url="${site}/" || url="${site}/${page}"
   lastmod_map="${lastmod_map}${url}|${commit_date}|"
 done
 

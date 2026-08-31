@@ -387,7 +387,6 @@ a.btn-primary {
 .page-intro-lead {
   font-size: 0.9375rem;
   color: var(--text-muted);
-  max-width: 60ch;
 }
 .page-intro-meta {
   font-size: 0.75rem;

@@ -1,53 +1,28 @@
 # Skribbl Solver
 
-A free, open-source fan-made tool for [skribbl.io](https://skribbl.io) players.
+Static site for [skribbl.io](https://skribbl.io) players: search the blank hint the game shows you against 69
+bundled word lists (~23k words), and build a merged list to paste into a custom lobby. No accounts, no backend,
+everything runs in the browser and persists to `localStorage`.
 
-> [!WARNING]
-> **No support. No warranty. No guarantee of service.** This is a hobby project.
-> It may be changed, broken, or shut down permanently at any time without notice
-> and without liability. See the
-> [Terms of Use](https://skribbl.cpwillis.dev/terms.html) and
-> [Privacy & Storage](https://skribbl.cpwillis.dev/privacy.html).
->
-> **Not affiliated with skribbl.io.** Independent community tool.
+Live at <https://skribbl.cpwillis.dev>. Not affiliated with skribbl.io.
 
----
+Hobby project: no support, no warranty, no guarantee of service.
+[Terms](https://cpwillis.dev/terms) · [Privacy](https://cpwillis.dev/privacy) ·
+[Attributions](https://skribbl.cpwillis.dev/attributions)
 
-## Features
+## Hint syntax
 
-- **Hint Search** - Enter the blank hint from the game (e.g. `_oa__`) using `_`, `?` or `*` for unknown letters, or type word lengths (e.g. `4 3`) in the letter-count field. The two fields stay in sync, results update live as you type, and the letters you already know are highlighted in each match.
-- **Word List Builder** - Select and combine any of the included word lists. Merged pools are case-insensitively deduplicated. Choose a word count (50, 100, All, or custom), shuffle, and copy the result as a comma-separated list for a custom lobby.
-- **Custom Word List** - Paste your own comma-separated list, save it to your browser, and run the same search against it.
-- **Saved Combos** - Save named selections of word lists for quick recall.
-- **Share URL** - Encode your current selection into a URL.
-- **Surprise Me** - Load a random word list.
-- **Export** - Download your word set as a `.txt` file.
-- **Word length filter** - Filter by character count in every tab.
-- **Dark mode** - Persistent, respects your system preference.
-- **PWA** - Installable, works fully offline after first load.
-- **Mobile friendly** - Responsive down to small phones.
+`_`, `?` and `*` each stand for one unknown letter, spaces are literal word breaks, everything else is a literal
+character. Matching is anchored and case-insensitive.
 
----
+```
+_oa__      board, coach, coast, koala, toast
+b*n*n*     banana
+*** ****   Bob Ross, Hot Fuzz, Jet Pack
+```
 
-## Word lists
-
-69 lists, ~23,100 words, across Animals, Anime, Brands, Countries, Difficulties,
-Dungeons & Dragons, Famous People, Food & Drinks, Harry Potter, Languages,
-Miscellaneous, Movies & Shows, Pokémon, Sports and Video Games. The picker on
-the [live site](https://skribbl.cpwillis.dev) browses all of them.
-
-Each list is a plain JSON array under `public/words/`, indexed by
-[`manifest.json`](public/words/manifest.json), which is the source of truth for
-what ships.
-
-Themed lists contain names that belong to other people. **No ownership is
-claimed over any of them**, and nothing here is affiliated with or endorsed by
-them: they are single-word drawing prompts, and no artwork, logo, character, or
-text is reproduced. Full attributions and the takedown route are in the
-[Terms of Use](https://skribbl.cpwillis.dev/terms.html#attributions). The NSFW
-list contains explicit language and is opt-in only.
-
----
+The letter-count field is the same pattern in another form: typing `3 4` fills the hint field with `*** ****`,
+and the two stay in sync as you type.
 
 ## Local development
 
@@ -55,12 +30,13 @@ list contains explicit language and is opt-in only.
 npx serve public
 ```
 
-Any static file server works. No toolchain, no `npm install`, no build step.
-`.claude/launch.json` wires the same command up for editor and agent previews.
-The service worker does not register on localhost, so edits show up on a plain
-reload.
+Any static file server works. No `npm install`, no build step, no dependencies. `.claude/launch.json` wires the
+same command up for editor and agent previews.
 
-One self-check covers the hint-pattern logic:
+The service worker deliberately does not register on `localhost` or `127.0.0.1` (`public/js/pwa.js`), so a plain
+reload shows your edits.
+
+One self-check covers the hint-pattern logic in `public/js/app.js`:
 
 ```bash
 node test.mjs
@@ -68,12 +44,27 @@ node test.mjs
 
 ## Deployment
 
-Cloudflare Workers static assets, configured in
-[`wrangler.jsonc`](wrangler.jsonc).
+Cloudflare Workers static assets, configured in [`wrangler.jsonc`](wrangler.jsonc). Push to `main` and Workers
+Builds runs `bash ../deploy.sh` (deploy command set in the Cloudflare dashboard, not in this repo). No build
+command.
 
-```bash
-./deploy.sh
-```
+`./deploy.sh` runs the same thing locally against your own `wrangler` login. Before `npx wrangler@4 deploy` it:
 
-It stamps the build SHA and freshness dates, deploys, then restores the working
-tree. The header comment in [`deploy.sh`](deploy.sh) explains the mechanics.
+- stamps the git short SHA into `CACHE` in `public/sw.js` (byte-changing the file is what makes clients reinstall
+  the service worker and re-cache), and into the `build-sha` span in the footer
+- stamps `<lastmod>` in `public/sitemap.xml` and JSON-LD `dateModified` from each page's own last commit date, not
+  the deploy date
+- restores all three files on exit, so the `xxxxxxx` placeholders stay in git
+
+A dirty working tree gets a timestamp suffix on the cache version, since HEAD no longer describes what shipped.
+
+## Word lists
+
+Each list is a JSON array of strings under `public/words/<Group>/<Name>.json`. `public/words/manifest.json` is the
+source of truth for what ships; a file not listed there is invisible to the app and to the service worker's
+precache. Merged selections are deduplicated case-insensitively. The NSFW list is opt-in.
+
+Lists name third-party brands, characters and people. Nothing is claimed or reproduced beyond the names
+themselves; see [Attributions](https://skribbl.cpwillis.dev/attributions) for the credits and the takedown route.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) covers adding a list and the constraints on changes.
